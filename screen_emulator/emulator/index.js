@@ -337,15 +337,15 @@ function formCheck() {
             device_type = '21_9_inverted';
         }
     }
+    //Smartphone
     if (pointer.value == 'coarse' && parseFloat(win_width.value) < parseFloat(win_height.value) && monochrome.value == 0) {
         device_type = 'smartphone';
     }
+    //Smartwatch
     if (win_width.value == win_height.value && pointer.value == 'coarse') {
         device_type = 'smartwatch';
     }
-    if (grid_type.value == 1) {
-        device_type = 'grid';
-    }
+    //Viewport segments API
     if (checkbox_viewport_segments_api.checked || checkbox_screen_fold_api.checked) {
         if (parseFloat(win_width.value) > parseFloat(win_height.value)) {
             device_type = 'fold';
@@ -363,6 +363,10 @@ function formCheck() {
         } else if (monochrome_color.value == 'amber') {
             device_type = 'monochrome_amber';
         }
+    }
+    //Grid
+    if (grid_type.value == 1) {
+        device_type = 'grid';
     }
     //Printer
     if (update.value == 'none') {
