@@ -1,70 +1,59 @@
+
 # CSSim
 
-> _CSSim – a CSS environment and device emulator for frontend developers_
+**CSSim** is a desktop application built with [Electron](https://www.electronjs.org/) that allows you to **simulate CSS media queries** without needing to run your project on physical devices.  
+It’s a handy tool for front-end developers testing website responsiveness.
 
 ---
 
-**Note:** This project is currently in **alpha stage**.  
-The first code release will be published soon.
+## ⚙️ Requirements
+
+- [XAMPP](https://www.apachefriends.org/) or a compatible substitute (Apache + PHP + MySQL)  
+- [Node.js & npm](https://nodejs.org/)  
 
 ---
 
-## 🔍 About the project
+## 🚀 Installation
 
-**CSSim** is a tool for frontend developers designed to **emulate devices** and **test CSS layouts** across various — including unusual — screen types.  
-It allows realistic simulation of different rendering environments, from modern smartphones to print preview.
-
----
-
-## 🎯 Planned features
-
-- ✅ Emulation of standard **touchscreen smartphones**, including:
-  - Support for **notches** and **safe-area insets**.
-  - Full support for CSS `env()` variables.
-
-- ✅ Simulation of **foldable devices** (Samsung Galaxy Z, Surface Duo):
-  - Foldable screen support.
-  - Viewport segmentation (planned for future releases).
-
-- ✅ Support for **T9 keypad phones**.
-
-- ✅ Emulation of **any desktop monitors**.
-
-- ✅ **Print preview** mode.
-
-- ✅ Browser behavior simulation:
-  - **Chromium**, **Firefox**, **Safari**, **Opera Mini** (planned).
+1. Copy the `screen_emulator` folder into your `htdocs` directory (or equivalent).  
+2. Open a terminal in the project folder.  
+3. Install dependencies:
+   ```bash
+   npm install
+  4. Start the application:
+     ```bash
+     npm install
 
 ---
 
-## 🛠️ Technical features
+## 📖 Usage
 
-- ✅ Full emulation of standard **CSS media queries**.
-- 🚧 Planned support for **browser-specific media queries**:
-  - Firefox, Safari.
-  - Foldable-specific APIs (CSS and JS).
-- ✅ Adjustable **CSS environment variables (`env()`)** through a user-friendly interface.
-- ✅ Custom **device profile creation and loading**.
+1. Place your website files (HTML, CSS, JS, etc.) into the `project` subfolder.
+2. At the bottom of the UI, click the **Render** button:
+   -   Press it **every time you change your project files**.
+   -   You do **not** need to re-render when adjusting settings in the application.
+ 
+---
+
+## 🐞 Known Issues
+
+- On the first application startup, the **Render** function may not work.  
+👉 Simply run it again.
+ 
+---
+
+## ⚠️ Potential Limitations
+
+-   The application is designed for **plain CSS** only.  
+    Framework-based projects (React, Angular, Vue, etc.) or more advanced HTML structures may cause unexpected behavior.
+-   Currently, there is no support for **Safari- or Firefox-exclusive media queries**.  
+    (Planned in future releases.)
 
 ---
 
-## 📅 Project status
+## 📌 Project Status
 
-CSSim is currently in the **architecture design** phase.  
-Version **1.0.0** will focus on:
-- Full support for traditional screens and smartphones.
-- Emulation of environment variables and media queries.
-- Codebase prepared for future foldable support (v2.0).
-
----
-
-## 📌 Target audience
-
-- Frontend developers.
-- QA engineers and testers.
-- CSS framework and library creators.
-
----
-
-Do you have ideas for the future of CSSim?  
-Watch this repository and follow the roadmap!
+-   The application is designed for **plain CSS** only.  
+    Framework-based projects (React, Angular, Vue, etc.) or more advanced HTML structures may cause unexpected behavior.
+-   Currently, there is no support for **Safari- or Firefox-exclusive media queries**.  
+    (Planned in future releases.)

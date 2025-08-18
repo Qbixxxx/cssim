@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <style>
+            body {
+                background-color: #1f1f1f;
+                overflow: hidden;
+                margin: 0;
+            }
+            button {
+                width: 45%;
+                background-color: #242424;
+                color: #cccccc;
+                border: 2px solid #454545;
+                border-radius: 5px;
+                margin: 5px 0 0 0;
+                cursor: pointer;
+                margin: 5px 27.5% 0;
+            }
+            button:hover {
+                background-color: #2a2a2a;
+            }
+            #fold_degree_slider {
+                width: 45%;
+                margin-left: 27.5%;
+            }
+            #fold_degree_number {
+                width: 45%;
+                margin: 5px 27.5% 0;
+                background-color: #242424;
+                color: #cccccc;
+                border: 2px solid #454545;
+                border-radius: 5px;
+            }
+            #fold_degree_number:focus {
+                outline: none;
+            }
+            #fold_degree_number::-webkit-outer-spin-button,
+            #fold_degree_number::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <button onclick="status('orientation')" id="rotate_button">Rotate</button>
+        <input type="range" min="1" max="360" value="180" id="fold_degree_slider" />
+        <input type="number" value="360" id="fold_degree_number" />
+        <script>
+            let y = 0;
+            let window_orientation;
+            let window_width;
+            let window_height;
+            let viewport_orientation;
+            let viewport_width;
+            let viewport_height;
+            let fold_degree_slider = document.getElementById('fold_degree_slider');
+            let fold_degree_number = document.getElementById('fold_degree_number');
+            let data = {
+                device_posture: 'continuous',
+                screen_fold_posture: 'flat'
+            };
+            function status(status) {
+                if (status == 'orientation') {
+                    if (viewport_orientation == 'portrait' && viewport_width >= viewport_height) {
+                        data.orientation = 'landscape';
+                        viewport_orientation = 'landscape';
+                    } else {
+                        data.orientation = 'portrait';
+                        viewport_orientation = 'portrait';
+                    }
+                    if (window_orientation == 'portrait' && window_width !== window_height) {
+                        data.orientation_window = 'landscape';
+                        window_orientation = 'landscape';
+                    } else {
+                        data.orientation_window = 'portrait';
+                        window_orientation = 'portrait';
+                    }
+                }
+                alert(data.screen_fold_api_max);
+                if (fold_degree_slider.style.display != 'none') {
+                    if (fold_degree_slider.value == 180) {
+                        data.device_posture = 'continuous';
+                    } else {
+                        data.device_posture = 'folded';
+                    }
+                    if (fold_degree_slider.value >= 1 && fold_degree_slider.value <= 140) {
+                        if (window_orientation == 'portrait') {
+                            data.screen_fold_posture = 'laptop';
+                        } else if (window_orientation == 'landscape') {
+                            data.screen_fold_posture = 'book';
+                        }
+                    } else if (fold_degree_slider.value >= 141 && fold_degree_slider.value <= 185) {
+                        data.screen_fold_posture = 'flat';
+                    } else if (fold_degree_slider.value >= 186 && fold_degree_slider.value <= 335) {
+                        data.screen_fold_posture = 'tent';
+                    } else if (fold_degree_slider.value >= 336 && fold_degree_slider.value <= 360) {
+                        data.screen_fold_posture = 'tablet';
+                    }
+                }
+                sendData();
+            }
+            function sendData() {
+                fetch('http://localhost/screen_emulator/emulator/panel.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+            }
+            sendData();
+
+            function fetchJsonData() {
+                fetch('http://localhost/screen_emulator/emulator/panel_get_data.php')
+                    .then(response => response.json())
+                    .then(data => {
+                        //console.log('📦 Odebrane dane:', data);
+                        fold_degree_slider.max = data.screen_fold_api_max;
+                        window_orientation = data.orientation_window;
+                        window_width = parseFloat(data.win_width);
+                        window_height = parseFloat(data.win_height);
+                        viewport_orientation = data.orientation;
+                        viewport_width = data.viewport_width;
+                        viewport_height = data.viewport_height;
+                        if (data.screen_fold_api_max == 0) {
+                            fold_degree_slider.style.display = 'none';
+                            fold_degree_number.style.display = 'none';
+                            data.device_posture = 'continuous';
+                            data.screen_fold_posture = '';
+                        } else {
+                            fold_degree_slider.style.display = 'block';
+                            fold_degree_number.style.display = 'block';
+                        }
+                    });
+            }
+            setInterval(() => {
+                fetchJsonData();
+            }, 100);
+            function correctDegrees() {
+                if (fold_degree_number.value == 0) {
+                    fold_degree_number.value = 1;
+                }
+                if (fold_degree_number.value > parseFloat(fold_degree_slider.max)) {
+                    fold_degree_number.value = fold_degree_slider.max;
+                }
+            }
+            fold_degree_slider.addEventListener('click', () => {
+                fold_degree_number.value = fold_degree_slider.value;
+                status();
+            });
+            fold_degree_number.addEventListener('change', () => {
+                correctDegrees();
+                fold_degree_slider.value = fold_degree_number.value;
+                status();
+            });
+            correctDegrees();
+
+            function sendHeight() {
+                const height = document.body.offsetHeight;
+                parent.postMessage({ type: 'resize', height }, '*');
+            }
+            window.onload = sendHeight;
+            window.onresize = sendHeight;
+        </script>
+    </body>
+</html>

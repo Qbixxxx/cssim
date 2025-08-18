@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="index.css" />
+    </head>
+    <body>
+        <nav>
+            <div onclick="appAPI.exitApp()"></div>
+        </nav>
+        <main>
+            <table>
+                <tr>
+                    <th colspan="2">Screen size</th>
+                </tr>
+                <tr>
+                    <td>width:</td>
+                    <td><input type="number" id="window_width" value="1280" /> px</td>
+                </tr>
+                <tr>
+                    <td>height:</td>
+                    <td><input type="number" id="window_height" value="720" /> px</td>
+                </tr>
+                <tr>
+                    <td>scale:</td>
+                    <td><input type="number" id="window_modifier" value="1" /> * smaller</td>
+                </tr>
+                <tr>
+                    <td>diagonal:</td>
+                    <td><input type="checkbox" id="checkbox_diagonal" value="1" /></td>
+                </tr>
+                <tr id="list_diagonal">
+                    <td></td>
+                    <td><input type="number" id="diagonal" value="1" /> ″</td>
+                </tr>
+                <tr>
+                    <td>dpi:</td>
+                    <td><input type="number" id="dpi" value="1" /> dpi</td>
+                </tr>
+                <tr>
+                    <th colspan="2" class="header">Navigation bars</th>
+                </tr>
+                <tr>
+                    <td>left:</td>
+                    <td><input type="number" id="viewport_left" value="0" /> px</td>
+                </tr>
+                <tr>
+                    <td>right:</td>
+                    <td><input type="number" id="viewport_right" value="0" /> px</td>
+                </tr>
+                <tr>
+                    <td>top:</td>
+                    <td><input type="number" id="viewport_top" value="0" /> px</td>
+                </tr>
+                <tr>
+                    <td>bottom:</td>
+                    <td><input type="number" id="viewport_bottom" value="0" /> px</td>
+                </tr>
+                <tr>
+                    <th colspan="2" class="header">Colors</th>
+                </tr>
+                <tr>
+                    <td>color:</td>
+                    <td><input type="number" id="color" value="8" /></td>
+                </tr>
+                <tr>
+                    <td>color gamut:</td>
+                    <td>
+                        <select id="color_gamut_type">
+                            <option value="srgb" selected>srgb</option>
+                            <option value="p3">p3</option>
+                            <option value="rec2020">rec2020</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>color index:</td>
+                    <td><input type="number" id="color_index" value="1" /></td>
+                </tr>
+                <tr>
+                    <td>forced colors:</td>
+                    <td>
+                        <select id="forced_colors_type">
+                            <option value="active">active</option>
+                            <option value="none" selected>none</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>inverted colors:</td>
+                    <td>
+                        <select id="inverted_colors_type">
+                            <option value="inverted">inverted</option>
+                            <option value="none" selected>none</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>monochrome value:</td>
+                    <td>
+                        <select id="monochrome_type">
+                            <option value="0" selected>0</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="4">4</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>monochrome color:</td>
+                    <td>
+                        <select id="monochrome_color_type">
+                            <option value="green" selected>green</option>
+                            <option value="amber">amber</option>
+                            <option value="blue">blue</option>
+                            <option value="white">white</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>monochrome<br />filter only:</td>
+                    <td><input type="checkbox" id="checkbox_monochrome" /></td>
+                </tr>
+                <tr>
+                    <td>dynamic range:</td>
+                    <td>
+                        <select id="dynamic_range_type">
+                            <option value="standard" selected>standard</option>
+                            <option value="high">high</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="2" class="header">User preferences</th>
+                </tr>
+                <tr>
+                    <td>prefers color scheme:</td>
+                    <td>
+                        <select id="prefers_color_scheme_type">
+                            <option value="light" selected>light</option>
+                            <option value="dark">dark</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>prefers contrast:</td>
+                    <td>
+                        <select id="prefers_contrast_type">
+                            <option value="more">more</option>
+                            <option value="less">less</option>
+                            <option value="custom">custom</option>
+                            <option value="no-preference" selected>no-preference</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>prefers reduced motion:</td>
+                    <td>
+                        <select id="prefers_reduced_motion_type">
+                            <option value="reduce">reduce</option>
+                            <option value="no-preference" selected>no-preference</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>prefers reduced transparency:</td>
+                    <td>
+                        <select id="prefers_reduced_transparency_type">
+                            <option value="reduce">reduce</option>
+                            <option value="no-preference" selected>no-preference</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="2" class="header">Foldables</th>
+                </tr>
+                <tr>
+                    <td>Screen<br />Fold API:</td>
+                    <td><input type="checkbox" id="checkbox_screen_fold_api" /></td>
+                </tr>
+                <tr id="list_screen_fold_api">
+                    <td>Screen<br />max:</td>
+                    <td><input type="number" id="screen_fold_api_max" value="180" /> degrees</td>
+                </tr>
+                <tr>
+                    <td>Viewport<br />Segments API:</td>
+                    <td><input type="checkbox" id="checkbox_viewport_segments_api" /></td>
+                </tr>
+                <tr id="list_viewport_segments_api">
+                    <td>Free mode:</td>
+                    <td><input type="checkbox" id="checkbox_viewport_segments_api_free_mode" /></td>
+                </tr>
+                <tr id="viewport_segments_insert_point">
+                    <td colspan="2" class="buttons"><button id="button_screen_fold_api_add_segment">Add segment</button></td>
+                </tr>
+                <tr>
+                    <th colspan="2" class="header">Rendering</th>
+                </tr>
+                <tr>
+                    <td>update:</td>
+                    <td>
+                        <select id="update_type">
+                            <option value="fast" selected>fast</option>
+                            <option value="slow">slow</option>
+                            <option value="none">none</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>grid:</td>
+                    <td>
+                        <select id="grid_type">
+                            <option value="0" selected>0</option>
+                            <option value="1">1</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>display mode:</td>
+                    <td>
+                        <select id="display_mode_type" style="opacity: 0.6; pointer-events: none">
+                            <option value="browser" selected>browser</option>
+                            <option value="fullscreen">fullscreen</option>
+                            <option value="minimal-ui">minimal-ui</option>
+                            <option value="picture-in-picture">picture-in-picture</option>
+                            <option value="standalone">standalone</option>
+                            <option value="window-controls-overlay">window-controls-overlay</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>overflow block:</td>
+                    <td>
+                        <select id="overflow_block_type">
+                            <option value="scroll">scroll</option>
+                            <option value="optional-paged">optional-paged</option>
+                            <option value="paged">paged</option>
+                            <option value="none" selected>none</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>overflow inline:</td>
+                    <td>
+                        <select id="overflow_inline_type">
+                            <option value="scroll">scroll</option>
+                            <option value="none" selected>none</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>webkit transform 3D:</td>
+                    <td>
+                        <select id="webkit_transform_3d">
+                            <option value="true" selected>true</option>
+                            <option value="false">false</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>browser:</td>
+                    <td>
+                        <select id="browser_type">
+                            <option value="chromium" selected>Chromium</option>
+                            <option value="opera">Opera</option>
+                            <option value="opera_mini">Opera Mini</option>
+                            <option value="firefox">Firefox</option>
+                            <option value="safari_macos">Safari (MacOS)</option>
+                            <option value="safari_ios">Safari (IOS)</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>scripting:</td>
+                    <td>
+                        <select id="scripting_type">
+                            <option value="enabled" selected>enabled</option>
+                            <option value="initial-only">initial-only</option>
+                            <option value="none">none</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <th colspan="2" class="header">Input</th>
+                </tr>
+                <tr>
+                    <td>pointer:</td>
+                    <td>
+                        <select id="pointer_type">
+                            <option value="fine" selected>fine</option>
+                            <option value="coarse">coarse</option>
+                            <option value="none">none</option>
+                            <option value="fine-coarse">fine + coarse</option>
+                            <option value="fine-none">fine + none</option>
+                            <option value="none-fine">none + fine</option>
+                            <option value="none-coarse">none + coarse</option>
+                            <option value="coarse-fine">coarse + fine</option>
+                            <option value="fine-coarse-none">fine + coarse + none</option>
+                            <option value="none-fine-coarse">none + fine + coarse</option>
+                            <option value="coarse-fine-none">coarse + fine + none</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>hover:</td>
+                    <td>
+                        <select id="hover_type">
+                            <option value="hover" selected>hover</option>
+                            <option value="none">none</option>
+                            <option value="hover_none">hover + none</option>
+                            <option value="none_hover">none + hover</option>
+                        </select>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th colspan="2" class="header">Environment variables</th>
+                </tr>
+                <tr>
+                    <td>safe area inset<br />left:</td>
+                    <td><input type="number" id="safe_area_inset_left" value="0" /> px</td>
+                </tr>
+                <tr>
+                    <td>safe area inset<br />right:</td>
+                    <td><input type="number" id="safe_area_inset_right" value="0" /> px</td>
+                </tr>
+                <tr>
+                    <td>safe area inset<br />top:</td>
+                    <td><input type="number" id="safe_area_inset_top" value="0" /> px</td>
+                </tr>
+                <tr>
+                    <td>safe area inset<br />bottom:</td>
+                    <td><input type="number" id="safe_area_inset_bottom" value="0" /> px</td>
+                </tr>
+                <tr>
+                    <td>titlebar area<br />width:</td>
+                    <td><input type="number" id="titlebar_area_width" value="0" /> px</td>
+                </tr>
+                <tr>
+                    <td>titlebar area<br />height:</td>
+                    <td><input type="number" id="titlebar_area_height" value="0" /> px</td>
+                </tr>
+                <tr>
+                    <td>titlebar area x:</td>
+                    <td><input type="number" id="titlebar_area_x" value="0" /> px</td>
+                </tr>
+                <tr>
+                    <td>titlebar area y:</td>
+                    <td><input type="number" id="titlebar_area_y" value="0" /> px</td>
+                </tr>
+
+                <tr>
+                    <th colspan="2" class="header">Test project</th>
+                </tr>
+                <tr>
+                    <td class="buttons" colspan="2"><button onclick="copyAndAnalyze()">Render</button></td>
+                </tr>
+                <tr>
+                    <td class="buttons" colspan="2"><button id="openWindow">Test website</button></td>
+                </tr>
+                <tr>
+                    <td class="buttons" colspan="2"><button onclick="closeWindow()" id="closeWindow">End test</button></td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <iframe src="http://localhost/screen_emulator/emulator/panel.html" style="transform-origin: 0 0; width: 300px" id="iframe_panel"></iframe>
+                    </td>
+                </tr>
+            </table>
+        </main>
+        <aside>
+            <span>ver. 1.0.0</span>
+        </aside>
+        <script src="index.js"></script>
+    </body>
+</html>

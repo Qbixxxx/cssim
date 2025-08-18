@@ -1,0 +1,118 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="screen.css" />
+    </head>
+    <body>
+        <svg id="svg-container">
+            <filter id="color-filter"></filter>
+        </svg>
+        <div style="width: 270px; height: 660px; overflow: hidden" id="emulator_container">
+            <iframe src="screen_viewport.html" style="transform-origin: 0 0"></iframe>
+        </div>
+        <script>
+            const mod = window.appAPI.getMod();
+            const scale = 100 / mod;
+            let default_orientation;
+            const window_width = window.appAPI.getWidth();
+            const window_height = window.appAPI.getHeight();
+            const iframe = document.querySelector('#emulator_container iframe');
+            const emulator_container = document.getElementById('emulator_container');
+            let payload = {};
+            iframe.style.transform = `scale(${1 / mod})`;
+            fetch('panel.json')
+                .then(res => res.json())
+                .then(data => {
+                    payload.mod = mod;
+                    default_orientation = data.orientation_window;
+                    payload.default_orientation = default_orientation;
+                    payload.navigation_bar_left = data.navigation_bar_left;
+                    payload.navigation_bar_right = data.navigation_bar_right;
+                    payload.navigation_bar_top = data.navigation_bar_top;
+                    payload.navigation_bar_bottom = data.navigation_bar_bottom;
+                    payload.inverted_colors = data.inverted_colors;
+                    payload.window_width = window_width;
+                    payload.window_height = window_height;
+                    payload.orientation = data.orientation_window;
+                    iframe.addEventListener('load', () => {
+                        iframe.contentWindow.postMessage(payload, '*');
+                    });
+                    if (data.monochrome !== 0) {
+                        svg_content = '';
+                        if (data.monochrome == 1) {
+                            if (data.monochrome_color == 'white') {
+                                svg_content =
+                                    '<feColorMatrix type="matrix" values="0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0    0    0    1 0" /><feComponentTransfer><feFuncR type="discrete" tableValues="0 1"/><feFuncG type="discrete" tableValues="0 1"/><feFuncB type="discrete" tableValues="0 1"/></feComponentTransfer>';
+                            }
+                            if (data.monochrome_color == 'blue') {
+                                svg_content =
+                                    '<feColorMatrix type="matrix" values="0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0    0    0    1 0" /><feComponentTransfer><feFuncR type="discrete" tableValues="0 1"/><feFuncG type="discrete" tableValues="0 1"/><feFuncB type="discrete" tableValues="0 1"/></feComponentTransfer><feComponentTransfer><feFuncR type="discrete" tableValues="0 0"/><feFuncG type="discrete" tableValues="0 0"/><feFuncB type="discrete" tableValues="0 1"/></feComponentTransfer>';
+                            }
+                            if (data.monochrome_color == 'amber') {
+                                svg_content =
+                                    ' <feColorMatrix type="matrix" values="0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0    0    0    1 0" /><feComponentTransfer><feFuncR type="discrete" tableValues="0 1"/><feFuncG type="discrete" tableValues="0 1"/><feFuncB type="discrete" tableValues="0 1"/></feComponentTransfer><feComponentTransfer><feFuncR type="discrete" tableValues="0 1"/><feFuncG type="discrete" tableValues="0 0.6"/><feFuncB type="discrete" tableValues="0 0"/></feComponentTransfer>';
+                            }
+                            if (data.monochrome_color == 'green') {
+                                svg_content =
+                                    '<feColorMatrix type="matrix" values="0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0    0    0    1 0" /><feComponentTransfer><feFuncR type="discrete" tableValues="0 1"/><feFuncG type="discrete" tableValues="0 1"/><feFuncB type="discrete" tableValues="0 1"/></feComponentTransfer><feComponentTransfer><feFuncR type="discrete" tableValues="0 0"/><feFuncG type="discrete" tableValues="0 1"/><feFuncB type="discrete" tableValues="0 0"/></feComponentTransfer></filter>';
+                            }
+                        } else if (data.monochrome == 2) {
+                            if (data.monochrome_color == 'white') {
+                                svg_content =
+                                    '<feColorMatrix type="matrix" values="0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0    0    0    1 0" /><feComponentTransfer><feFuncR type="discrete" tableValues="0 0.33 0.66 1"/><feFuncG type="discrete" tableValues="0 0.33 0.66 1"/><feFuncB type="discrete" tableValues="0 0.33 0.66 1"/></feComponentTransfer>';
+                            }
+                            if (data.monochrome_color == 'blue') {
+                                svg_content =
+                                    '<feColorMatrix type="matrix" values="0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0    0    0    1 0" /><feComponentTransfer><feFuncR type="discrete" tableValues="0 0.33 0.66 1"/><feFuncG type="discrete" tableValues="0 0.33 0.66 1"/><feFuncB type="discrete" tableValues="0 0.33 0.66 1"/></feComponentTransfer><feComponentTransfer><feFuncR type="discrete" tableValues="0 0 0 0"/><feFuncG type="discrete" tableValues="0 0 0 0"/><feFuncB type="discrete" tableValues="0 0.33 0.66 1"/></feComponentTransfer>';
+                            }
+                            if (data.monochrome_color == 'amber') {
+                                svg_content =
+                                    '<feColorMatrix type="matrix" values="0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0    0    0    1 0" /><feComponentTransfer><feFuncR type="discrete" tableValues="0 0.33 0.66 1"/><feFuncG type="discrete" tableValues="0 0.2 0.4 0.6"/><feFuncB type="discrete" tableValues="0 0 0 0"/></feComponentTransfer>';
+                            }
+                            if (data.monochrome_color == 'green') {
+                                svg_content =
+                                    '<feColorMatrix type="matrix" values="0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0    0    0    1 0" /><feComponentTransfer><feFuncR type="discrete" tableValues="0 0.33 0.66 1"/><feFuncG type="discrete" tableValues="0 0.33 0.66 1"/><feFuncB type="discrete" tableValues="0 0.33 0.66 1"/></feComponentTransfer><feComponentTransfer><feFuncR type="discrete" tableValues="0 0 0 0"/><feFuncG type="discrete" tableValues="0 0.33 0.66 1"/><feFuncB type="discrete" tableValues="0 0 0 0"/></feComponentTransfer>';
+                            }
+                        } else if (data.monochrome == 4) {
+                            if (data.monochrome_color == 'white') {
+                                svg_content =
+                                    '<feColorMatrix type="matrix" values="0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0    0    0    1 0" /><feComponentTransfer><feFuncR type="discrete" tableValues="0 0.066 0.133 0.2 0.266 0.333 0.4 0.466 0.533 0.6 0.666 0.733 0.8 0.866 0.933 1"/><feFuncG type="discrete" tableValues="0 0.066 0.133 0.2 0.266 0.333 0.4 0.466 0.533 0.6 0.666 0.733 0.8 0.866 0.933 1"/><feFuncB type="discrete" tableValues="0 0.066 0.133 0.2 0.266 0.333 0.4 0.466 0.533 0.6 0.666 0.733 0.8 0.866 0.933 1"/></feComponentTransfer>';
+                            }
+                            if (data.monochrome_color == 'blue') {
+                                svg_content =
+                                    '<feColorMatrix type="matrix" values="0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0    0    0    1 0" /><feComponentTransfer><feFuncR type="discrete" tableValues="0 0.066 0.133 0.2 0.266 0.333 0.4 0.466 0.533 0.6 0.666 0.733 0.8 0.866 0.933 1"/><feFuncG type="discrete" tableValues="0 0.066 0.133 0.2 0.266 0.333 0.4 0.466 0.533 0.6 0.666 0.733 0.8 0.866 0.933 1"/><feFuncB type="discrete" tableValues="0 0.066 0.133 0.2 0.266 0.333 0.4 0.466 0.533 0.6 0.666 0.733 0.8 0.866 0.933 1"/></feComponentTransfer><feComponentTransfer><feFuncR type="discrete" tableValues="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"/><feFuncG type="discrete" tableValues="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"/><feFuncB type="discrete" tableValues="0 0.066 0.133 0.2 0.266 0.333 0.4 0.466 0.533 0.6 0.666 0.733 0.8 0.866 0.933 1"/></feComponentTransfer>';
+                            }
+                            if (data.monochrome_color == 'amber') {
+                                svg_content =
+                                    '<feColorMatrix type="matrix" values="0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0    0    0    1 0" /><feComponentTransfer><feFuncR type="discrete" tableValues="0 0.066 0.133 0.2 0.266 0.333 0.4 0.466 0.533 0.6 0.666 0.733 0.8 0.866 0.933 1"/><feFuncG type="discrete" tableValues="0 0.066 0.133 0.2 0.266 0.333 0.4 0.466 0.533 0.6 0.666 0.733 0.8 0.866 0.933 1"/><feFuncB type="discrete" tableValues="0 0.066 0.133 0.2 0.266 0.333 0.4 0.466 0.533 0.6 0.666 0.733 0.8 0.866 0.933 1"/></feComponentTransfer><feComponentTransfer><feFuncR type="discrete" tableValues="0 0.066 0.133 0.2 0.266 0.333 0.4 0.466 0.533 0.6 0.666 0.733 0.8 0.866 0.933 1"/><feFuncG type="discrete" tableValues="0 0.04 0.08 0.12 0.16 0.2 0.24 0.28 0.32 0.36 0.4 0.44 0.48 0.52 0.56 0.6"/><feFuncB type="discrete" tableValues="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"/></feComponentTransfer>';
+                            }
+                            if (data.monochrome_color == 'green') {
+                                svg_content =
+                                    '<feColorMatrix type="matrix" values="0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0.33 0.33 0.33 0 0 0    0    0    1 0" /><feComponentTransfer><feFuncR type="discrete" tableValues="0 0.066 0.133 0.2 0.266 0.333 0.4 0.466 0.533 0.6 0.666 0.733 0.8 0.866 0.933 1" /><feFuncG type="discrete" tableValues="0 0.066 0.133 0.2 0.266 0.333 0.4 0.466 0.533 0.6 0.666 0.733 0.8 0.866 0.933 1" /><feFuncB type="discrete" tableValues="0 0.066 0.133 0.2 0.266 0.333 0.4 0.466 0.533 0.6 0.666 0.733 0.8 0.866 0.933 1" /></feComponentTransfer><feComponentTransfer><feFuncR type="discrete" tableValues="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"/><feFuncG type="discrete" tableValues="0 0.066 0.133 0.2 0.266 0.333 0.4 0.466 0.533 0.6 0.666 0.733 0.8 0.866 0.933 1"/><feFuncB type="discrete" tableValues="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0"/></feComponentTransfer>';
+                            }
+                        }
+                        document.getElementById('color-filter').innerHTML = svg_content;
+                        iframe.style.filter = 'url(#color-filter)';
+                    }
+                });
+            setInterval(() => {
+                fetch('panel.json')
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.orientation_window == default_orientation) {
+                            emulator_container.style.width = window_width + 'px';
+                            emulator_container.style.height = window_height + 'px';
+                            iframe.style.width = window_width * mod + 'px';
+                            iframe.style.height = window_height * mod + 'px';
+                        } else if (data.orientation_window != default_orientation) {
+                            emulator_container.style.width = window_height + 'px';
+                            emulator_container.style.height = window_width + 'px';
+                            iframe.style.width = window_height * mod + 'px';
+                            iframe.style.height = window_width * mod + 'px';
+                        }
+                        payload.orientation = data.orientation_window;
+                        iframe.contentWindow.postMessage(payload, '*');
+                    });
+            }, 100);
+        </script>
+    </body>
+</html>

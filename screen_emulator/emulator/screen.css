@@ -1,0 +1,22 @@
+::-webkit-scrollbar {
+    display: none;
+    overflow: hidden;
+}
+body {
+    margin: 0;
+}
+body#viewport {
+    background-color: #1f1f1f;
+}
+iframe {
+    border: none;
+}
+#emulator_container {
+    width: 270px;
+    height: 660px;
+    overflow: hidden;
+    position: absolute;
+}
+svg#svg-container {
+    display: none;
+}

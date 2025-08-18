@@ -1,0 +1,59 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="screen.css" />
+    </head>
+    <body id="viewport">
+        <div id="emulator_container">
+            <iframe src="http://localhost/screen_emulator/render/index.html" style="transform-origin: 0 0"></iframe>
+        </div>
+        <script>
+            let mod;
+            let default_orientation = '';
+            let navigation_bar_left;
+            let navigation_bar_right;
+            let navigation_bar_top;
+            let navigation_bar_bottom;
+            let window_width;
+            let viewport_height;
+            let viewport_width;
+            let window_height;
+            let orientation;
+            const iframe = document.querySelector('#emulator_container iframe');
+            const emulator_container = document.getElementById('emulator_container');
+            window.addEventListener('message', event => {
+                const data = event.data;
+                mod = parseFloat(data['mod']);
+                if (data['inverted_colors'] == 'inverted') {
+                    iframe.style.filter = 'invert(100%)';
+                }
+                if (default_orientation == '') {
+                    default_orientation = data['default_orientation'];
+                }
+                navigation_bar_left = parseFloat(data['navigation_bar_left']);
+                navigation_bar_right = parseFloat(data['navigation_bar_right']);
+                navigation_bar_top = parseFloat(data['navigation_bar_top']);
+                navigation_bar_bottom = parseFloat(data['navigation_bar_bottom']);
+                window_width = parseFloat(data['window_width']);
+                window_height = parseFloat(data['window_height']);
+                orientation = data['orientation'];
+                setViewport();
+            });
+            function setViewport() {
+                let w = window_width;
+                let h = window_height;
+                if (orientation != default_orientation) {
+                    // Zamień szerokość z wysokością przy zmianie orientacji
+                    [w, h] = [h, w];
+                }
+                viewport_width = mod * w - navigation_bar_left - navigation_bar_right;
+                viewport_height = mod * h - navigation_bar_top - navigation_bar_bottom;
+                emulator_container.style.width = viewport_width + 'px';
+                emulator_container.style.height = viewport_height + 'px';
+                iframe.style.width = viewport_width + 'px';
+                iframe.style.height = viewport_height + 'px';
+                emulator_container.style.left = navigation_bar_left + 'px';
+                emulator_container.style.top = navigation_bar_top + 'px';
+            }
+        </script>
+    </body>
+</html>
