@@ -7,7 +7,7 @@ Information about updates will appear here.
 ## 🐞 Known Issues
 
 - On the first application startup, the **Render** function may not work.  
-👉 Simply run it again.
+👉 Simply run it again. 
 
 ---
 
@@ -17,6 +17,8 @@ Information about updates will appear here.
     Framework-based projects (React, Angular, Vue, etc.) or more advanced HTML structures may cause unexpected behavior.
 -   Currently, there is no support for **Safari- or Firefox-exclusive media queries**.  
     (Planned in future releases.)
+- Grid mode does not simulate terminals correctly. However, the media query itself will be activated.
+- My emulator only modifies CSS—there is currently no JS hooks.
 
 ---
 
@@ -39,5 +41,6 @@ Information about updates will appear here.
 - Supported media queries : `aspect-ratio`, `color`, `color-gamut`, `color-index`, `device-aspect-ratio`, `device-height`, `device-posture`, `device-width`, `display-mode`, `dynamic-range`, `forced-colors`, `grid`, `height`, `hover`, `inverted-colors`, `monochrome`, `orientation`, `overflow-block`, `overflow-inline`, `pointer`, `prefers-color-scheme`, `prefers-contrast`, `prefers-reduced-motion`, `prefers-reduced-transparency`, `resolution`, `scripting`, `update`, `width`, `-webkit-transform-3d`.
   
   The `any`, `min`, and `max` variants are also included.
-- a
+- Monochrome mode activates a color filter that helps with UI design. You can choose from white, green, amber, and blue colors. In addition, you can choose 1, 2, or 4 bits, and thanks to the “filter only” mode, you can also simulate devices that do not send the appropriate information to the browser despite being monochrome, such as Kindle.
+- The filter also works with inverted colors (can be combined with monochrome).
 
