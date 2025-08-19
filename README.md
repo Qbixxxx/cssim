@@ -32,28 +32,5 @@ It’s a handy tool for front-end developers testing website responsiveness.
 2. At the bottom of the UI, click the **Render** button:
    -   Press it **every time you change your project files**.
    -   You do **not** need to re-render when adjusting settings in the application.
- 
----
 
-## 🐞 Known Issues
-
-- On the first application startup, the **Render** function may not work.  
-👉 Simply run it again.
- 
----
-
-## ⚠️ Potential Limitations
-
--   The application is designed for **plain CSS** only.  
-    Framework-based projects (React, Angular, Vue, etc.) or more advanced HTML structures may cause unexpected behavior.
--   Currently, there is no support for **Safari- or Firefox-exclusive media queries**.  
-    (Planned in future releases.)
-
----
-
-## 📌 Project Status
-
--   The application is designed for **plain CSS** only.  
-    Framework-based projects (React, Angular, Vue, etc.) or more advanced HTML structures may cause unexpected behavior.
--   Currently, there is no support for **Safari- or Firefox-exclusive media queries**.  
-    (Planned in future releases.)
+Check the [changelog](changelog.md) for a list of known bugs and limitations.
