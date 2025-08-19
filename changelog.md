@@ -18,7 +18,7 @@ Information about updates will appear here.
 -   Currently, there is no support for **Safari- or Firefox-exclusive media queries**.  
     (Planned in future releases.)
 - Grid mode does not simulate terminals correctly. However, the media query itself will be activated.
-- My emulator only modifies CSS—there is currently no JS hooks.
+- This emulator only modifies CSS—there is currently no JS hooks.
 
 ---
 
