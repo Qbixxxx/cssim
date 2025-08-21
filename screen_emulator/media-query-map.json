@@ -1,33 +1,5 @@
 {
   "index.html": {
-    "emulator-orientation-landscape": "body",
-    "emulator-orientation-portrait": "body",
-    "emulator-prefers-color-scheme-light": "body",
-    "emulator-prefers-color-scheme-dark": "body",
-    "emulator-min-resolution-131--dot--4dcm": "body",
-    "emulator-resolution-334dpi": "body",
-    "emulator-max-resolution-5--dot--21ddpx": "body h1",
-    "emulator-spanning-single-fold-vertical": "body",
-    "emulator-spanning-single-fold-horizontal": "body",
-    "emulator-width-1280px": "body",
-    "emulator-monochrome": "body",
-    "emulator-min-monochrome-2": "body",
-    "emulator-max-monochrome-4": "body",
-    "emulator-max-monochrome-0": "body",
-    "emulator-inverted-colors-inverted": "body",
-    "emulator-color-gamut-srgb": "body",
-    "emulator-color-gamut-p3": "body",
-    "emulator-color-gamut-rec2020": "body",
-    "emulator-forced-colors-active": "body",
-    "emulator-forced-colors-none": "body",
-    "emulator-inverted-colors-none": "body",
-    "emulator-dynamic-range-standard": "body",
-    "emulator-dynamic-range-high": "body",
-    "emulator-color": "body",
-    "emulator-min-color-2": "body",
-    "emulator-max-color-4": "body",
-    "emulator-color-0": "body",
-    "emulator-min-color-0": "body",
-    "emulator-screen-fold-posture-book": "body"
+    "emulator-color": "body"
   }
 }

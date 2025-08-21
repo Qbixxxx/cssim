@@ -23,5 +23,6 @@ contextBridge.exposeInMainWorld('appAPI', {
     appendScriptToHTML: () => ipcRenderer.invoke('append-script-to-html'),
     setVariable: (key, value) => ipcRenderer.invoke('set-css-variable', key, value),
     addVariable: (key, value) => ipcRenderer.invoke('add-css-variable', key, value),
-    getAllVariables: () => ipcRenderer.invoke('get-css-variables')
+    getAllVariables: () => ipcRenderer.invoke('get-css-variables'),
+    contrastType: contrast_type_value => ipcRenderer.invoke('contrast-type', contrast_type_value)
 });

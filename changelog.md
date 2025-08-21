@@ -1,3 +1,4 @@
+
 # Changelog
 
 Information about updates will appear here.
@@ -6,8 +7,9 @@ Information about updates will appear here.
 
 ## 🐞 Known Issues
 
+- The comments in the scripts are rough and partly not in English.
 - On the first application startup, the **Render** function may not work.  
-👉 Simply run it again. 
+👉 Simply run app again. 
 
 ---
 
@@ -19,16 +21,18 @@ Information about updates will appear here.
     (Planned in future releases.)
 - Grid mode does not simulate terminals correctly. However, the media query itself will be activated.
 - This emulator only modifies CSS—there is currently no JS hooks.
+- **Potential** differences between simulated high-contrast and real behavior.
 
 ---
 
-## [1.1.0] - 19.08.2025
+## [1.1.0] - 21.08.2025
 
-- Forced colors has been improved - CSS code is injected into the page to simulate the selected high contrast mode (based on the default filters in Windows 11).
+- Forced colors has been improved - CSS code is injected into the page to simulate the selected high contrast mode (based on the default filters in Windows 11 - Aquarium, Desert, Dusk and Night sky).
+- media-query.js has been improved to avoid conflicts with the user's page.
 
 ---
 
-## [1.0.1] - 18.08.2025
+## [1.0.1] - 19.08.2025
 
 - Device visualization has been improved.
 - Browser selection has been locked on Chromium.
@@ -43,4 +47,3 @@ Information about updates will appear here.
   The `any`, `min`, and `max` variants are also included.
 - Monochrome mode activates a color filter that helps with UI design. You can choose from white, green, amber, and blue colors. In addition, you can choose 1, 2, or 4 bits, and thanks to the “filter only” mode, you can also simulate devices that do not send the appropriate information to the browser despite being monochrome, such as Kindle.
 - The filter also works with inverted colors (can be combined with monochrome).
-

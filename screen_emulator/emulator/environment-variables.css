@@ -1,10 +1,10 @@
 :root {
-  --emulator-safe-area-inset-left: 0px;
-  --emulator-safe-area-inset-right: 0px;
-  --emulator-safe-area-inset-top: 0px;
-  --emulator-safe-area-inset-bottom: 0px;
-  --emulator-titlebar-area-width: 0px;
-  --emulator-titlebar-area-height: 0px;
-  --emulator-titlebar-area-x: 0px;
-  --emulator-titlebar-area-y: 0px;
+    --emulator-safe-area-inset-left: 0px;
+    --emulator-safe-area-inset-right: 0px;
+    --emulator-safe-area-inset-top: 0px;
+    --emulator-safe-area-inset-bottom: 0px;
+    --emulator-titlebar-area-width: 0px;
+    --emulator-titlebar-area-height: 0px;
+    --emulator-titlebar-area-x: 0px;
+    --emulator-titlebar-area-y: 0px;
 }

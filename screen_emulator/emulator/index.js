@@ -14,6 +14,7 @@ color = document.getElementById('color');
 color_gamut = document.getElementById('color_gamut_type');
 color_index = document.getElementById('color_index');
 forced_colors = document.getElementById('forced_colors_type');
+forced_colors_type = document.getElementById('forced_colors_type_type');
 inverted_colors = document.getElementById('inverted_colors_type');
 monochrome = document.getElementById('monochrome_type');
 monochrome_color = document.getElementById('monochrome_color_type');
@@ -70,6 +71,7 @@ onChangeElements = [
     color_gamut,
     color_index,
     forced_colors,
+    forced_colors_type,
     inverted_colors,
     monochrome,
     monochrome_color,
@@ -247,6 +249,13 @@ function formCheck() {
     color_index.value = Math.round(color_index.value);
     newData.color_index = color_index.value;
     newData.forced_colors = forced_colors.value;
+    if (forced_colors.value == 'active') {
+        manageObj(forced_colors_type, 3);
+        window.appAPI.contrastType(forced_colors_type.value);
+    } else {
+        manageObj(forced_colors_type, 2);
+        window.appAPI.contrastType('none');
+    }
     newData.inverted_colors = inverted_colors.value;
     newData.monochrome = monochrome.value;
     newData.monochrome_color = monochrome_color.value;
