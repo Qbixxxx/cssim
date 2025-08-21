@@ -27,7 +27,7 @@ Information about updates will appear here.
 
 ## [1.1.0] - 21.08.2025
 
-- Forced colors has been improved - CSS code is injected into the page to simulate the selected high contrast mode (based on the default filters in Windows 11 - Aquarium, Desert, Dusk and Night sky).
+- Forced colors has been improved - CSS code is injected into the page to simulate the selected high contrast mode (based on the default filters in Windows 11 - Aquatic, Desert, Dusk and Night sky).
 - media-query.js has been improved to avoid conflicts with the user's page.
 
 ---
