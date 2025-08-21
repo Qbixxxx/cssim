@@ -39,7 +39,7 @@ Information about updates will appear here.
 ## [1.1.0] - 20.08.2025
 
 - Forced colors has been improved - CSS code is injected into the page to simulate the selected high contrast mode (based on the default filters in Windows 11 - Aquatic, Desert, Dusk and Night sky).
-- Missing support for spanning has been added.
+- Missing support for `spanning` media query has been added.
 
 ---
 
