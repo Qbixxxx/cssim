@@ -62,26 +62,27 @@ setInterval(() => {
                             (emulator_dpi_class_type === 'min' && (emulator_dpi_class_value <= emulator_dpi_value || emulator_dpx_class_value <= emulator_dpx_value || emulator_dcm_class_value <= emulator_dcm_value)) ||
                             (emulator_dpi_class_type === 'max' && (emulator_dpi_class_value >= emulator_dpi_value || emulator_dpx_class_value >= emulator_dpx_value || emulator_dcm_class_value >= emulator_dcm_value))
                         ) {
-                            document.querySelectorAll(emulator_media_query[emulator_key]).forEach(el => {
-                                el.classList.add(emulator_dpi_class_name);
-                            });
+                            emulator_addClass(emulator_dpi_class_name, emulator_media_query[emulator_key], 1);
                         }
                     }
                     //Monochrome-------------------------------------------------------------------------------------------------------------------------------------------------------
                     if ((emulator_key.startsWith('emulator_min_monochrome') || emulator_key.startsWith('emulator_max_monochrome')) && data.monochrome != 0 && data.monochrome_filter == 0) {
-                        alert('ok');
                         emulator_monochrome_type = emulator_key.split('emulator_')[1].split('_monochrome_')[0];
                         emulator_monochrome_value = parseFloat(emulator_key.split('emulator_')[1].split('_monochrome_')[1]);
                         if (((emulator_monochrome_type == 'min' && emulator_monochrome_value <= data.monochrome) || (emulator_monochrome_type == 'max' && emulator_monochrome_value >= data.monochrome)) && emulator_monochrome_value != 0) {
-                            document.querySelectorAll(emulator_media_query[emulator_key]).forEach(el => {
-                                el.classList.add(emulator_key.replace(/_/g, '-'));
-                            });
+                            emulator_addClass(emulator_key.replace(/_/g, '-'), emulator_media_query[emulator_key], 1);
                         }
                     }
                     if ((emulator_key == 'emulator_monochrome' && data.monochrome != 0) || (emulator_key == 'emulator_monochrome_0' && data.monochrome == 0)) {
-                        document.querySelectorAll(emulator_media_query[emulator_key]).forEach(el => {
-                            el.classList.add(emulator_key.replace(/_/g, '-'));
-                        });
+                        emulator_addClass(emulator_key.replace(/_/g, '-'), emulator_media_query[emulator_key], 1);
+                    }
+                    if (emulator_key.startsWith('emulator_spanning')) {
+                        console.log(data.spanning);
+                        if (data.spanning == 'single-fold-horizontal') {
+                            emulator_addClass('emulator-spanning-single-fold-horizontal', emulator_media_query['emulator_spanning_single_fold_horizontal'], 1);
+                        } else if (data.spanning == 'single-fold-vertical') {
+                            emulator_addClass('emulator-spanning-single-fold-vertical', emulator_media_query['emulator_spanning_single_fold_vertical'], 1);
+                        }
                     }
                     //Color scheme-----------------------------------------------------------------------------------------------------------------------------------------------------
                     if (emulator_panel['color_scheme'] == 'light') {
@@ -125,9 +126,7 @@ setInterval(() => {
                     } else if (emulator_panel['forced_colors'] == 'active') {
                         emulator_addClass('emulator-forced-colors-active', emulator_media_query['emulator_forced_colors_active'], 1);
                         // 1. Nadajemy wszystkim elementom klasę emulatora
-                        document.querySelectorAll('*').forEach(el => {
-                            el.classList.add('emulator-forced-colors-active-forced');
-                        });
+                        emulator_addClass('emulator-forced-colors-active-forced', '*', 1);
 
                         // 2. Obliczamy efektywną wartość forced-color-adjust od góry do dołu
                         let emulator_all = document.querySelectorAll('*');
@@ -188,24 +187,18 @@ setInterval(() => {
                         emulator_color_value = parseFloat(emulator_key.split('_').at(-1));
                         emulator_color_type = emulator_key.split('emulator_')[1].split('color_')[0].slice(0, -1);
                         if (((emulator_color_type == 'min' && emulator_color_value <= data.color) || (emulator_color_type == 'max' && emulator_color_value >= data.color)) && emulator_color_value != 0) {
-                            document.querySelectorAll(emulator_media_query[emulator_key]).forEach(el => {
-                                el.classList.add(emulator_key.replace(/_/g, '-'));
-                            });
+                            emulator_addClass(emulator_key.replace(/_/g, '-'), emulator_media_query[emulator_key], 1);
                         }
                     }
                     if ((emulator_key == 'emulator_color' && data.color != 0) || (emulator_key == 'emulator_color_0' && data.color == 0) || (emulator_key.startsWith('emulator_color_') && emulator_key.split('_').at(-1) == data.color)) {
-                        document.querySelectorAll(emulator_media_query[emulator_key]).forEach(el => {
-                            el.classList.add(emulator_key.replace(/_/g, '-'));
-                        });
+                        emulator_addClass(emulator_key.replace(/_/g, '-'), emulator_media_query[emulator_key], 1);
                     }
                     //Color index------------------------------------------------------------------------------------------------------------------------------------------------------
                     if ((emulator_key.startsWith('emulator_min_color_index') || emulator_key.startsWith('emulator_max_color_index')) && data.color_index != 0) {
                         emulator_color_index_value = parseFloat(emulator_key.split('_').at(-1));
                         emulator_color_index_type = emulator_key.split('emulator_')[1].split('color_index_')[0].slice(0, -1);
                         if (((emulator_color_index_type == 'min' && emulator_color_index_value <= data.color_index) || (emulator_color_index_type == 'max' && emulator_color_index_value >= data.color_index)) && emulator_color_index_value != 0) {
-                            document.querySelectorAll(emulator_media_query[emulator_key]).forEach(el => {
-                                el.classList.add(emulator_key.replace(/_/g, '-'));
-                            });
+                            emulator_addClass(emulator_key.replace(/_/g, '-'), emulator_media_query[emulator_key], 1);
                         }
                     }
                     if (
@@ -213,9 +206,7 @@ setInterval(() => {
                         (emulator_key == 'emulator_color_index_0' && data.color_index == 0) ||
                         (emulator_key.startsWith('emulator_color_index_') && emulator_key.split('_').at(-1) == data.color_index)
                     ) {
-                        document.querySelectorAll(emulator_media_query[emulator_key]).forEach(el => {
-                            el.classList.add(emulator_key.replace(/_/g, '-'));
-                        });
+                        emulator_addClass(emulator_key.replace(/_/g, '-'), emulator_media_query[emulator_key], 1);
                     }
                     //Update-----------------------------------------------------------------------------------------------------------------------------------------------------------
                     if (emulator_panel['update'] == 'fast') {
@@ -392,6 +383,8 @@ setInterval(() => {
                     emulator_addClass('emulator-device-posture-continuous', emulator_media_query['emulator_device_posture_continuous'], 1);
                 }
                 //Screen fold posture--------------------------------------------------------------------------------------------------------------------------------------------------
+                document.documentElement.style.setProperty('--emulator-screen-fold-angle', emulator_panel['screen_fold_angle']);
+
                 if (emulator_panel['screen_fold_posture'] == 'book') {
                     emulator_addClass('emulator-screen-fold-posture-book', emulator_media_query['emulator_screen_fold_posture_book'], 1);
                     emulator_addClass('emulator-screen-fold-posture-laptop', emulator_media_query['emulator_screen_fold_posture_laptop'], 0);
@@ -481,9 +474,7 @@ setInterval(() => {
                             emulator_conditionMet = emulator_viewportValue === emulator_pxValue;
                         }
                         if (emulator_conditionMet) {
-                            document.querySelectorAll(emulator_media_query[emulator_key]).forEach(el => {
-                                el.classList.add(emulator_key.replace(/_/g, '-'));
-                            });
+                            emulator_addClass(emulator_key.replace(/_/g, '-'), emulator_media_query[emulator_key], 1);
                         }
                     }
                     //Device size------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -60,7 +60,8 @@
             let fold_degree_number = document.getElementById('fold_degree_number');
             let data = {
                 device_posture: 'continuous',
-                screen_fold_posture: 'flat'
+                screen_fold_posture: 'flat',
+                screen_fold_angle: '180deg'
             };
             function status(status) {
                 if (status == 'orientation') {
@@ -79,13 +80,13 @@
                         window_orientation = 'portrait';
                     }
                 }
-                alert(data.screen_fold_api_max);
                 if (fold_degree_slider.style.display != 'none') {
                     if (fold_degree_slider.value == 180) {
                         data.device_posture = 'continuous';
                     } else {
                         data.device_posture = 'folded';
                     }
+                    data.screen_fold_angle = fold_degree_slider.value + 'deg';
                     if (fold_degree_slider.value >= 1 && fold_degree_slider.value <= 140) {
                         if (window_orientation == 'portrait') {
                             data.screen_fold_posture = 'laptop';

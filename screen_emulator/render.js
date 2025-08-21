@@ -19,24 +19,23 @@ const fixMediaQueryFormatting = postcss.plugin('fix-media-query-formatting', () 
     };
 });
 function replaceEnvWithVar(cssRoot) {
-    cssRoot.walkDecls(decl => {
-        // Szukamy w wartościach 'env(...)'
-        const envRegex = /env\(\s*([\w-]+)\s*(?:,\s*([^)]+))?\s*\)/g;
+    const envRegex = /env\(\s*([\w-]+)\s*(?:,\s*([^)]+))?\s*\)/g;
 
+    cssRoot.walkDecls(decl => {
         decl.value = decl.value.replace(envRegex, (match, envVarName, fallback) => {
-            // Zmieniamy nazwę na emulatorową zmienną CSS
-            const emulatorVarName = `--emulator-${envVarName.trim()}`;
+            // Zmieniamy nazwę na emulatorową zmienną CSS i zamieniamy _ na -
+            const emulatorVarName = `--emulator-${envVarName.trim().replace(/_/g, '-')}`;
 
             // Jeśli fallback jest podany, przekazujemy go do var()
             if (fallback) {
                 return `var(${emulatorVarName}, ${fallback.trim()})`;
             } else {
-                // jeśli nie ma fallbacku - podajemy bez fallbacku
                 return `var(${emulatorVarName})`;
             }
         });
     });
 }
+
 function copyRecursiveSync(src, dest) {
     if (!fs.existsSync(dest)) {
         fs.mkdirSync(dest, { recursive: true });

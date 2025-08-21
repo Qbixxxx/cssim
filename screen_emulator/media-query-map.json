@@ -1,5 +1,6 @@
 {
   "index.html": {
-    "emulator-color": "body"
+    "emulator-spanning-single-fold-vertical": "body",
+    "emulator-spanning-single-fold-horizontal": "body"
   }
 }

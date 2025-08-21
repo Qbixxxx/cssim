@@ -315,6 +315,13 @@ function formCheck() {
     if (checkbox_screen_fold_api.checked) {
         manageObj(list_screen_fold_api, 1);
     } else manageObj(list_screen_fold_api, 0);
+    newData.spanning = 'none';
+    if (checkbox_screen_fold_api.checked && segments['0_0'] != undefined && segments['1_0'] != undefined && Object.keys(segments).length === 2) {
+        newData.spanning = 'single-fold-horizontal';
+    }
+    if (checkbox_screen_fold_api.checked && segments['0_0'] != undefined && segments['0_1'] != undefined && Object.keys(segments).length === 2) {
+        newData.spanning = 'single-fold-vertical';
+    }
     window.appAPI.saveJson(newData);
 
     //Device type detection------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -356,11 +363,15 @@ function formCheck() {
     }
     //Viewport segments API
     if (checkbox_viewport_segments_api.checked || checkbox_screen_fold_api.checked) {
-        if (parseFloat(win_width.value) > parseFloat(win_height.value)) {
+        if (segments['0_0'] != undefined && segments['1_0'] != undefined && Object.keys(segments).length === 2) {
             device_type = 'fold';
-        } else device_type = 'flip';
-        if (checkbox_viewport_segments_api_free_mode.checked || (segments['0_1'] != null && segments['1_0'] != null)) device_type = 'intresting';
+        } else if (segments['0_0'] != undefined && segments['0_1'] != undefined && Object.keys(segments).length === 2) {
+            device_type = 'flip';
+        } else device_type = 'smartphone';
+
+        if (Object.keys(segments).length >= 3) device_type = 'intresting';
     }
+
     //Monochrome terminals
     if (monochrome.value != 0) {
         if (monochrome_color.value == 'white') {
@@ -1012,6 +1023,7 @@ async function removeSegment(id, force = false) {
     if (!checkbox_viewport_segments_api_free_mode.checked) {
         autoLayoutSegmentSizes();
     }
+    formCheck();
 }
 
 async function removeViewportCSSVars(id) {

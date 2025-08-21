@@ -21,6 +21,9 @@ if (isset($data['screen_fold_posture'])) {
 if (isset($data['device_posture'])) {
     $existing['device_posture'] = $data['device_posture'];
 }
+if (isset($data['screen_fold_angle'])) {
+    $existing['screen_fold_angle'] = $data['screen_fold_angle'];
+}
 if (isset($data['color_scheme'])) {
     $existing['color_scheme'] = $data['color_scheme'];
 }

@@ -1,10 +1,22 @@
 :root {
-    --emulator-safe-area-inset-left: 0px;
-    --emulator-safe-area-inset-right: 0px;
-    --emulator-safe-area-inset-top: 0px;
-    --emulator-safe-area-inset-bottom: 0px;
-    --emulator-titlebar-area-width: 0px;
-    --emulator-titlebar-area-height: 0px;
-    --emulator-titlebar-area-x: 0px;
-    --emulator-titlebar-area-y: 0px;
+  --emulator-safe-area-inset-left: 0px;
+  --emulator-safe-area-inset-right: 0px;
+  --emulator-safe-area-inset-top: 0px;
+  --emulator-safe-area-inset-bottom: 0px;
+  --emulator-titlebar-area-width: 0px;
+  --emulator-titlebar-area-height: 0px;
+  --emulator-titlebar-area-x: 0px;
+  --emulator-titlebar-area-y: 0px;
+  --emulator-viewport-segment-width-0-0: 640px;
+  --emulator-viewport-segment-height-0-0: 720px;
+  --emulator-viewport-segment-left-0-0: 0px;
+  --emulator-viewport-segment-top-0-0: 0px;
+  --emulator-viewport-segment-right-0-0: 640px;
+  --emulator-viewport-segment-bottom-0-0: 0px;
+  --emulator-viewport-segment-width-1-0: 640px;
+  --emulator-viewport-segment-height-1-0: 720px;
+  --emulator-viewport-segment-left-1-0: 640px;
+  --emulator-viewport-segment-top-1-0: 0px;
+  --emulator-viewport-segment-right-1-0: 0px;
+  --emulator-viewport-segment-bottom-1-0: 0px;
 }
