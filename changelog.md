@@ -8,8 +8,12 @@ Information about updates will appear here.
 ## 🐞 Known Issues
 
 - The comments in the scripts are rough and partly not in English.
-- On the first application startup, the **Render** function may not work.  
-👉 Simply run app again. 
+- The algorithm that calculates the available viewport IDs sometimes gives wrong IDs.
+
+  👉 Ignore it, or use free mode. 
+- On the first application startup, the **Render** function may not work.
+
+  👉 Simply run app again. 
 
 ---
 
