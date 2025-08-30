@@ -220,11 +220,11 @@ function formCheck() {
     //Data update----------------------------------------------------------------------------------------------------------------------------------------------------------------------
     newData.win_width = win_width.value;
     newData.win_height = win_height.value;
-    if (parseFloat(win_width.value) > parseFloat(win_height.value)) {
-        newData.orientation = 'landscape';
-    } else newData.orientation = 'portrait';
     newData.viewport_width = win_width.value - navigation_bar_left.value - navigation_bar_right.value;
     newData.viewport_height = win_height.value - navigation_bar_top.value - navigation_bar_bottom.value;
+    if (win_width.value - navigation_bar_left.value - navigation_bar_right.value > win_height.value - navigation_bar_top.value - navigation_bar_bottom.value) {
+        newData.orientation = 'landscape';
+    } else newData.orientation = 'portrait';
     newData.navigation_bar_left = navigation_bar_left.value;
     newData.navigation_bar_right = navigation_bar_right.value;
     newData.navigation_bar_top = navigation_bar_top.value;
