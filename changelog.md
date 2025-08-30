@@ -8,6 +8,9 @@ Information about updates will appear here.
 ## 🐞 Known Issues
 
 - The comments in the scripts are rough and partly not in English.
+- When scaling a window, if fractions occur, the window has random dimensions.
+
+  👉 Do not set, for example, 1283 at 50% scaling.
 - The algorithm that calculates the available viewport IDs sometimes gives wrong IDs.
 
   👉 Ignore it, or use free mode. 
@@ -26,6 +29,13 @@ Information about updates will appear here.
 - Grid mode does not simulate terminals correctly. However, the media query itself will be activated.
 - This emulator only modifies CSS—there is currently no JS hooks.
 - **Potential** differences between simulated high-contrast and real behavior.
+
+---
+
+## [1.1.2] - 30.08.2025
+
+- The “Rotate” function, which caused errors with media queries, has been removed. You must change the dimensions yourself before running the test.
+- Fixed bugs related to pseudoclasses.
 
 ---
 
