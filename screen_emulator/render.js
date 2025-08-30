@@ -136,11 +136,12 @@ async function transformCSSFile(filePath) {
     for (const block of styleBlocks.reverse()) {
         const root = postcss.parse(block.css, { parser: safeParser });
         await postcss([fixMediaQueryFormatting]).process(root, { from: undefined });
+
         root.walkAtRules('media', atRule => {
-            const media = atRule.params;
-            const orBlocks = media.split(/\s*,\s*/);
+            const orBlocks = atRule.params.split(/\s*,\s*/);
             const replacementNodes = [];
             const allClassSelectors = [];
+
             orBlocks.forEach(orBlock => {
                 const andConditions = orBlock.split(/\s+and\s+/i).map(c => c.trim());
                 const className =
@@ -156,24 +157,35 @@ async function transformCSSFile(filePath) {
                                 .toLowerCase()
                         )
                         .join('.');
-                allClassSelectors.push(className);
+                if (className) allClassSelectors.push(className);
             });
+
             atRule.walkRules(rule => {
                 const newRule = rule.clone();
                 newRule.selectors = rule.selectors.flatMap(sel => {
                     const parts = sel.trim().split(/\s+/);
-                    const last = parts.pop();
+                    let last = parts.pop();
+
+                    // wydziel pseudoklasę (:first-child, :nth-child(2), ...)
+                    const match = last.match(/^([^\:]+)(.*)$/);
+                    let element = match ? match[1] : last;
+                    let pseudo = match ? match[2] : '';
+
                     return allClassSelectors.map(className => {
-                        const lastWithClass = `${last}.${className}`;
+                        // CSS: element + klasa + pseudoklasa
+                        const lastWithClass = `${element}.${className}${pseudo}`;
                         return [...parts, lastWithClass].join(' ');
                     });
                 });
                 replacementNodes.push(newRule);
             });
+
             atRule.replaceWith(...replacementNodes);
         });
+
         replaceEnvWithVar(root);
         const transformed = root.toString();
+
         if (isHTMLLike) {
             output = output.slice(0, block.start) + `<style>\n${transformed}\n</style>` + output.slice(block.end);
         } else {
@@ -190,14 +202,11 @@ function parseCSSContent(css) {
     const entries = [];
 
     root.walkAtRules('media', atRule => {
-        const media = atRule.params;
-        const orBlocks = media.split(/\s*,\s*/);
-
+        const orBlocks = atRule.params.split(/\s*,\s*/);
         const classSelectors = [];
 
         orBlocks.forEach(orBlock => {
             const andConditions = orBlock.split(/\s+and\s+/i).map(c => c.trim());
-
             const className =
                 'emulator-' +
                 andConditions
@@ -211,22 +220,30 @@ function parseCSSContent(css) {
                             .toLowerCase()
                     )
                     .join('.');
-
-            classSelectors.push(className);
+            if (className) classSelectors.push(className);
         });
 
         const selectors = [];
+        const selectorsForJSON = [];
         const declarations = [];
+
         atRule.walkRules(rule => {
             rule.selectors.forEach(sel => {
-                const parts = sel.trim().split(/\s+/);
-                const last = parts.pop();
+                // regex do wyciągnięcia wszystkich pseudoklas na końcu
+                const pseudoMatch = sel.match(/(:\w+(\([^)]+\))?)+$/g);
+                let pseudo = '';
+                if (pseudoMatch) pseudo = pseudoMatch[0];
 
+                // element bez pseudoklas
+                const element = sel.replace(pseudo, '');
+
+                // CSS: element + klasa emulatora + pseudoklasa
                 classSelectors.forEach(className => {
-                    const lastWithClass = `${last}.${className}`;
-                    const finalSelector = [...parts, lastWithClass].join(' ');
-                    selectors.push(finalSelector);
+                    selectors.push(`${element}.${className}${pseudo}`);
                 });
+
+                // JSON: element + pseudoklasa (bez klasy emulatora)
+                selectorsForJSON.push(sel);
             });
 
             rule.walkDecls(decl => {
@@ -236,9 +253,11 @@ function parseCSSContent(css) {
                 });
             });
         });
+
         entries.push({
             className: classSelectors.join(', '),
             selectors: [...new Set(selectors)],
+            selectorsForJSON: [...new Set(selectorsForJSON)],
             declarations,
             media: orBlocks.join(', ')
         });
@@ -303,7 +322,7 @@ async function analyzeMediaQueries() {
             if (value instanceof Set) {
                 output[file][className] = Array.from(value).join(', ');
             } else {
-                output[file][className] = String(value); // fallback
+                output[file][className] = String(value).replace(/^,\s*/, '');
             }
         }
     }

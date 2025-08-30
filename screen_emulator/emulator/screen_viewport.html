@@ -8,7 +8,6 @@
         </div>
         <script>
             let mod;
-            let default_orientation = '';
             let navigation_bar_left;
             let navigation_bar_right;
             let navigation_bar_top;
@@ -26,9 +25,6 @@
                 if (data['inverted_colors'] == 'inverted') {
                     iframe.style.filter = 'invert(100%)';
                 }
-                if (default_orientation == '') {
-                    default_orientation = data['default_orientation'];
-                }
                 navigation_bar_left = parseFloat(data['navigation_bar_left']);
                 navigation_bar_right = parseFloat(data['navigation_bar_right']);
                 navigation_bar_top = parseFloat(data['navigation_bar_top']);
@@ -41,10 +37,6 @@
             function setViewport() {
                 let w = window_width;
                 let h = window_height;
-                if (orientation != default_orientation) {
-                    // Zamień szerokość z wysokością przy zmianie orientacji
-                    [w, h] = [h, w];
-                }
                 viewport_width = mod * w - navigation_bar_left - navigation_bar_right;
                 viewport_height = mod * h - navigation_bar_top - navigation_bar_bottom;
                 emulator_container.style.width = viewport_width + 'px';

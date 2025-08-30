@@ -8,41 +8,6 @@ let newWin1 = null;
 let originalWidth = null;
 let originalHeight = null;
 let watchInterval = null;
-function watchOrientationChange(filePath) {
-    let prevOrientation = null;
-    let width = originalWidth;
-    let height = originalHeight;
-
-    watchInterval = setInterval(() => {
-        fs.readFile(filePath, 'utf8', (err, data) => {
-            if (err || !newWin1) return;
-
-            try {
-                const config = JSON.parse(data);
-                const currentOrientation = config.orientation_window;
-
-                if (prevOrientation === null) {
-                    prevOrientation = currentOrientation;
-                    centerWindow(width, height);
-                    return;
-                }
-
-                if (currentOrientation !== prevOrientation) {
-                    // Obrót tylko jeśli zmieniła się orientacja
-                    if ((prevOrientation === 'portrait' && currentOrientation === 'landscape') || (prevOrientation === 'landscape' && currentOrientation === 'portrait')) {
-                        const temp = width;
-                        width = height;
-                        height = temp;
-                    }
-                    prevOrientation = currentOrientation;
-                    centerWindow(width, height);
-                }
-            } catch (e) {
-                clearInterval(watchInterval);
-            }
-        });
-    }, 100);
-}
 
 function centerWindow(width, height) {
     if (!newWin1) return;
@@ -227,6 +192,5 @@ app.whenReady().then(() => {
         newWin1.loadFile('emulator/screen.html');
         originalWidth = newWin1.getBounds().width;
         originalHeight = newWin1.getBounds().height;
-        watchOrientationChange(jsonPath);
     });
 });

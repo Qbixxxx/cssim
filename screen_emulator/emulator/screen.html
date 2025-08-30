@@ -12,7 +12,6 @@
         <script>
             const mod = window.appAPI.getMod();
             const scale = 100 / mod;
-            let default_orientation;
             const window_width = window.appAPI.getWidth();
             const window_height = window.appAPI.getHeight();
             const iframe = document.querySelector('#emulator_container iframe');
@@ -23,8 +22,6 @@
                 .then(res => res.json())
                 .then(data => {
                     payload.mod = mod;
-                    default_orientation = data.orientation_window;
-                    payload.default_orientation = default_orientation;
                     payload.navigation_bar_left = data.navigation_bar_left;
                     payload.navigation_bar_right = data.navigation_bar_right;
                     payload.navigation_bar_top = data.navigation_bar_top;
@@ -32,7 +29,7 @@
                     payload.inverted_colors = data.inverted_colors;
                     payload.window_width = window_width;
                     payload.window_height = window_height;
-                    payload.orientation = data.orientation_window;
+                    payload.orientation = data.orientation;
                     iframe.addEventListener('load', () => {
                         iframe.contentWindow.postMessage(payload, '*');
                     });
@@ -94,25 +91,18 @@
                         iframe.style.filter = 'url(#color-filter)';
                     }
                 });
-            setInterval(() => {
+            setTimeout(() => {
                 fetch('panel.json')
                     .then(res => res.json())
                     .then(data => {
-                        if (data.orientation_window == default_orientation) {
-                            emulator_container.style.width = window_width + 'px';
-                            emulator_container.style.height = window_height + 'px';
-                            iframe.style.width = window_width * mod + 'px';
-                            iframe.style.height = window_height * mod + 'px';
-                        } else if (data.orientation_window != default_orientation) {
-                            emulator_container.style.width = window_height + 'px';
-                            emulator_container.style.height = window_width + 'px';
-                            iframe.style.width = window_height * mod + 'px';
-                            iframe.style.height = window_width * mod + 'px';
-                        }
-                        payload.orientation = data.orientation_window;
+                        emulator_container.style.width = window_width + 'px';
+                        emulator_container.style.height = window_height + 'px';
+                        iframe.style.width = window_width * mod + 'px';
+                        iframe.style.height = window_height * mod + 'px';
+
                         iframe.contentWindow.postMessage(payload, '*');
                     });
-            }, 100);
+            }, 200);
         </script>
     </body>
 </html>

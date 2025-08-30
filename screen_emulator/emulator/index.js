@@ -220,6 +220,9 @@ function formCheck() {
     //Data update----------------------------------------------------------------------------------------------------------------------------------------------------------------------
     newData.win_width = win_width.value;
     newData.win_height = win_height.value;
+    if (parseFloat(win_width.value) > parseFloat(win_height.value)) {
+        newData.orientation = 'landscape';
+    } else newData.orientation = 'portrait';
     newData.viewport_width = win_width.value - navigation_bar_left.value - navigation_bar_right.value;
     newData.viewport_height = win_height.value - navigation_bar_top.value - navigation_bar_bottom.value;
     newData.navigation_bar_left = navigation_bar_left.value;
@@ -411,9 +414,6 @@ document.getElementById('openWindow').addEventListener('click', () => {
     if (parseFloat(newData.viewport_width) > parseFloat(newData.viewport_height)) {
         newData.orientation = 'landscape';
     } else newData.orientation = 'portrait';
-    if (parseFloat(newData.win_width) > parseFloat(newData.win_height)) {
-        newData.orientation_window = 'landscape';
-    } else newData.orientation_window = 'portrait';
     window.appAPI.saveJson(newData);
     window.appAPI.openNewWindow(document.getElementById('window_width').value / modifier, document.getElementById('window_height').value / modifier, 2, modifier);
 });

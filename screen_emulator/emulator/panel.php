@@ -12,9 +12,6 @@ if (file_exists($file)) {
 if (isset($data['orientation'])) {
     $existing['orientation'] = $data['orientation'];
 }
-if (isset($data['orientation_window'])) {
-    $existing['orientation_window'] = $data['orientation_window'];
-}
 if (isset($data['screen_fold_posture'])) {
     $existing['screen_fold_posture'] = $data['screen_fold_posture'];
 }

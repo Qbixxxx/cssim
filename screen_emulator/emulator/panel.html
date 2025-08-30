@@ -45,15 +45,13 @@
         </style>
     </head>
     <body>
-        <button onclick="status('orientation')" id="rotate_button">Rotate</button>
         <input type="range" min="1" max="360" value="180" id="fold_degree_slider" />
         <input type="number" value="360" id="fold_degree_number" />
         <script>
             let y = 0;
-            let window_orientation;
             let window_width;
             let window_height;
-            let viewport_orientation;
+            let window_orientation;
             let viewport_width;
             let viewport_height;
             let fold_degree_slider = document.getElementById('fold_degree_slider');
@@ -64,22 +62,6 @@
                 screen_fold_angle: '180deg'
             };
             function status(status) {
-                if (status == 'orientation') {
-                    if (viewport_orientation == 'portrait' && viewport_width >= viewport_height) {
-                        data.orientation = 'landscape';
-                        viewport_orientation = 'landscape';
-                    } else {
-                        data.orientation = 'portrait';
-                        viewport_orientation = 'portrait';
-                    }
-                    if (window_orientation == 'portrait' && window_width !== window_height) {
-                        data.orientation_window = 'landscape';
-                        window_orientation = 'landscape';
-                    } else {
-                        data.orientation_window = 'portrait';
-                        window_orientation = 'portrait';
-                    }
-                }
                 if (fold_degree_slider.style.display != 'none') {
                     if (fold_degree_slider.value == 180) {
                         data.device_posture = 'continuous';
@@ -118,12 +100,10 @@
                 fetch('http://localhost/screen_emulator/emulator/panel_get_data.php')
                     .then(response => response.json())
                     .then(data => {
-                        //console.log('📦 Odebrane dane:', data);
                         fold_degree_slider.max = data.screen_fold_api_max;
-                        window_orientation = data.orientation_window;
+                        correctDegrees();
                         window_width = parseFloat(data.win_width);
                         window_height = parseFloat(data.win_height);
-                        viewport_orientation = data.orientation;
                         viewport_width = data.viewport_width;
                         viewport_height = data.viewport_height;
                         if (data.screen_fold_api_max == 0) {
