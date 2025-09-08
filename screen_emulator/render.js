@@ -166,14 +166,21 @@ async function transformCSSFile(filePath) {
                     const parts = sel.trim().split(/\s+/);
                     let last = parts.pop();
 
-                    // wydziel pseudoklasę (:first-child, :nth-child(2), ...)
-                    const match = last.match(/^([^\:]+)(.*)$/);
-                    let element = match ? match[1] : last;
-                    let pseudo = match ? match[2] : '';
+                    // wydziel pseudoklasę / pseudo-element
+                    const pseudoMatch = last.match(/^(:[a-zA-Z0-9-()]+)$/);
+                    let element = '';
+                    let pseudo = '';
+
+                    if (pseudoMatch) {
+                        pseudo = last; // cały selektor to pseudoklasa
+                    } else {
+                        const match = last.match(/^([^\:]+)(.*)$/);
+                        element = match ? match[1] : last;
+                        pseudo = match ? match[2] : '';
+                    }
 
                     return allClassSelectors.map(className => {
-                        // CSS: element + klasa + pseudoklasa
-                        const lastWithClass = `${element}.${className}${pseudo}`;
+                        const lastWithClass = element ? `${element}.${className}${pseudo}` : `.${className}${pseudo}`; // jeśli element pusty, zaczynamy od kropki
                         return [...parts, lastWithClass].join(' ');
                     });
                 });
