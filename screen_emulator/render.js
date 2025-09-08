@@ -180,7 +180,11 @@ async function transformCSSFile(filePath) {
                     }
 
                     return allClassSelectors.map(className => {
-                        const lastWithClass = element ? `${element}.${className}${pseudo}` : `.${className}${pseudo}`; // jeśli element pusty, zaczynamy od kropki
+                        if (pseudo === ':root' && element === '') {
+                            // jeśli cały selektor to :root, zamieniamy na html
+                            return [...parts, `html.${className}`].join(' ');
+                        }
+                        const lastWithClass = element ? `${element}.${className}${pseudo}` : `.${className}${pseudo}`;
                         return [...parts, lastWithClass].join(' ');
                     });
                 });
@@ -236,26 +240,23 @@ function parseCSSContent(css) {
 
         atRule.walkRules(rule => {
             rule.selectors.forEach(sel => {
-                // regex do wyciągnięcia wszystkich pseudoklas na końcu
+                if (sel.trim() === ':root') {
+                    // jeśli selektor to dokładnie :root, użyj html
+                    classSelectors.forEach(className => {
+                        selectors.push(`html.${className}`);
+                    });
+                    return; // skip reszty
+                }
+
                 const pseudoMatch = sel.match(/(:\w+(\([^)]+\))?)+$/g);
                 let pseudo = '';
                 if (pseudoMatch) pseudo = pseudoMatch[0];
 
-                // element bez pseudoklas
                 const element = sel.replace(pseudo, '');
 
-                // CSS: element + klasa emulatora + pseudoklasa
                 classSelectors.forEach(className => {
                     selectors.push(`${element}.${className}${pseudo}`);
-
-                    // jeśli wykryto :root w pseudoklasie, dodajemy "html" jako selektor
-                    if (pseudo.includes(':root')) {
-                        selectors.push(`html.${className}`);
-                    }
                 });
-
-                // JSON: element + pseudoklasa (bez klasy emulatora)
-                selectorsForJSON.push(sel);
             });
 
             rule.walkDecls(decl => {
