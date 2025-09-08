@@ -32,6 +32,12 @@ Information about updates will appear here.
 
 ---
 
+## [1.1.3] - 30.08.2025
+
+- Fixed bugs related to :root.
+
+---
+
 ## [1.1.2] - 30.08.2025
 
 - The “Rotate” function, which caused errors with media queries, has been removed. You must change the dimensions yourself before running the test.
