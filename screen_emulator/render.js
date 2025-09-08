@@ -247,6 +247,11 @@ function parseCSSContent(css) {
                 // CSS: element + klasa emulatora + pseudoklasa
                 classSelectors.forEach(className => {
                     selectors.push(`${element}.${className}${pseudo}`);
+
+                    // jeśli wykryto :root w pseudoklasie, dodajemy "html" jako selektor
+                    if (pseudo.includes(':root')) {
+                        selectors.push(`html.${className}`);
+                    }
                 });
 
                 // JSON: element + pseudoklasa (bez klasy emulatora)
