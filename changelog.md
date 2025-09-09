@@ -32,7 +32,7 @@ Information about updates will appear here.
 
 ---
 
-## [1.1.3] - 30.08.2025
+## [1.1.3] - 09.09.2025
 
 - Fixed bugs related to :root.
 
