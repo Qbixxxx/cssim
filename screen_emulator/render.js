@@ -7,13 +7,10 @@ const fixMediaQueryFormatting = postcss.plugin('fix-media-query-formatting', () 
     return root => {
         root.walkAtRules('media', atRule => {
             atRule.params = atRule.params
-                // Wymuś spację po dwukropku
                 .replace(/(\w+)\s*:\s*(\d+)/g, (match, prop, value) => {
                     return `${prop}: ${value}`;
                 })
-                // Redukuj wielokrotne spacje do jednej
                 .replace(/\s{2,}/g, ' ')
-                // Usuń spacje na początku i końcu (dla porządku)
                 .trim();
         });
     };
@@ -23,10 +20,8 @@ function replaceEnvWithVar(cssRoot) {
 
     cssRoot.walkDecls(decl => {
         decl.value = decl.value.replace(envRegex, (match, envVarName, fallback) => {
-            // Zmieniamy nazwę na emulatorową zmienną CSS i zamieniamy _ na -
             const emulatorVarName = `--emulator-${envVarName.trim().replace(/_/g, '-')}`;
 
-            // Jeśli fallback jest podany, przekazujemy go do var()
             if (fallback) {
                 return `var(${emulatorVarName}, ${fallback.trim()})`;
             } else {
@@ -104,7 +99,6 @@ function getLinkedCSSPaths($, htmlPath) {
         .filter(Boolean);
 }
 
-// Główna funkcja transformacji z rozbiciem media query wg wysokości i innego warunku
 const extractStyleBlocks = html => {
     const styleRegex = /<style[^>]*>([\s\S]*?)<\/style>/gi;
     const styles = [];
@@ -166,13 +160,12 @@ async function transformCSSFile(filePath) {
                     const parts = sel.trim().split(/\s+/);
                     let last = parts.pop();
 
-                    // wydziel pseudoklasę / pseudo-element
                     const pseudoMatch = last.match(/^(:[a-zA-Z0-9-()]+)$/);
                     let element = '';
                     let pseudo = '';
 
                     if (pseudoMatch) {
-                        pseudo = last; // cały selektor to pseudoklasa
+                        pseudo = last;
                     } else {
                         const match = last.match(/^([^\:]+)(.*)$/);
                         element = match ? match[1] : last;
@@ -181,7 +174,6 @@ async function transformCSSFile(filePath) {
 
                     return allClassSelectors.map(className => {
                         if (pseudo === ':root' && element === '') {
-                            // jeśli cały selektor to :root, zamieniamy na html
                             return [...parts, `html.${className}`].join(' ');
                         }
                         const lastWithClass = element ? `${element}.${className}${pseudo}` : `.${className}${pseudo}`;
@@ -241,11 +233,10 @@ function parseCSSContent(css) {
         atRule.walkRules(rule => {
             rule.selectors.forEach(sel => {
                 if (sel.trim() === ':root') {
-                    // jeśli selektor to dokładnie :root, użyj html
                     classSelectors.forEach(className => {
                         selectors.push(`html.${className}`);
                     });
-                    return; // skip reszty
+                    return;
                 }
 
                 const pseudoMatch = sel.match(/(:\w+(\([^)]+\))?)+$/g);
@@ -279,13 +270,11 @@ function parseCSSContent(css) {
     return entries;
 }
 
-// 📄 Parsowanie z pliku
 const parseCSSFile = async filePath => {
     const css = fs.readFileSync(filePath, 'utf-8');
     return parseCSSContent(css);
 };
 
-// 📋 Główna analiza
 async function analyzeMediaQueries() {
     const renderDir = path.join(__dirname, 'render');
     const files = getAllFiles(renderDir);
@@ -303,7 +292,6 @@ async function analyzeMediaQueries() {
         console.log(`📄 Przetwarzanie pliku: ${relativePath}`);
         console.log(`  🔗 Znaleziono ${cssPaths.length} plików CSS:`);
 
-        // 🎯 1. Analiza zewnętrznych plików CSS
         for (const cssPath of cssPaths) {
             console.log(`    • ${cssPath}`);
             const entries = await parseCSSFile(cssPath);
@@ -312,7 +300,6 @@ async function analyzeMediaQueries() {
             processEntries(entries, $, output[relativePath]);
         }
 
-        // 🎯 2. Analiza stylów w <style>
         const inlineStyles = [];
         $('style').each((_, el) => {
             const css = $(el).html();
@@ -328,7 +315,6 @@ async function analyzeMediaQueries() {
         }
     }
 
-    // 🧹 Konwersja Setów do stringów
     for (const file in output) {
         for (const className in output[file]) {
             const value = output[file][className];
@@ -345,22 +331,16 @@ async function analyzeMediaQueries() {
     console.log(`✅ Zapisano analizę media queries do: ${outputPath}`);
 }
 
-// 🔁 Pomocnicza funkcja do przetwarzania wpisów
 function processEntries(entries, $, fileOutput) {
     for (const entry of entries) {
         const { className, selectors, declarations, media } = entry;
         console.log(`      ▶️ Analiza klasy: ${className} (media: ${media})`);
 
-        // Wyciągnięcie elementu bazowego z selektora (np. body, .panel)
         let baseElements = selectors.map(sel => {
-            // Pobierz pierwszy fragment selektora (np. body.orientation -> body)
             const first = sel.trim().split('.emulator-')[0];
             return first;
         });
-        // Usunięcie duplikatów
         baseElements = [...new Set(baseElements)];
-
-        // Zapisz do output
         fileOutput[className] = baseElements.join(', ');
         console.log(`        📝 Przypisano klasę ${className} do elementu: ${fileOutput[className]}`);
     }
@@ -385,13 +365,11 @@ async function appendScriptToAllHTMLFilesInRender() {
         const $ = cheerio.load(content, { decodeEntities: false });
         const hasBody = $('body').length > 0;
         const hasHead = $('head').length > 0;
-        if (!hasBody) return; // pomijamy pliki bez <body>
-        // 1. Dopisujemy <link> do <head>, jeśli <head> istnieje
+        if (!hasBody) return;
         if (hasHead) {
             const stylesheetLink = `<link rel="stylesheet" href="http://localhost/screen_emulator/emulator/environment-variables.css">`;
             $('head').prepend(stylesheetLink);
         }
-        // 2. Dopisujemy skrypt na koniec <body>
         $('body').append(scriptTag);
         const updatedContent = $.html();
         fs.writeFileSync(filePath, updatedContent, 'utf-8');

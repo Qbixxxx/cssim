@@ -17,17 +17,14 @@ setInterval(() => {
     fetch('http://localhost/screen_emulator/emulator/panel.json')
         .then(res => res.json())
         .then(data => {
-            //Edycja klucza, - na _----------------------------------------------------------------------------------------------------------------------------------------------------
             for (const emulator_key in data) {
                 const emulator_safeVarName = emulator_key.replace(/-/g, '_');
                 emulator_panel[emulator_safeVarName] = data[emulator_key];
             }
             emulator_dpi_value = emulator_panel['dpi'];
             emulator_dual_screen = emulator_panel['dual_screen'];
-            //Początek IFa-------------------------------------------------------------------------------------------------------------------------------------------------------------
             if (emulator_first_loop == 0) {
                 for (const emulator_key in emulator_media_query) {
-                    //DPI--------------------------------------------------------------------------------------------------------------------------------------------------------------
                     if ((emulator_key.startsWith('emulator_resolution_') || emulator_key.startsWith('emulator_min_resolution_') || emulator_key.startsWith('emulator_max_resolution_')) && emulator_dpi_value != 'none') {
                         emulator_dpi_value = parseFloat(emulator_dpi_value);
                         emulator_dpx_value = Math.round((emulator_dpi_value / 96) * 100) / 100;
@@ -56,7 +53,6 @@ setInterval(() => {
                             emulator_dpi_class_value = Math.round(emulator_dcm_class_value * 2.54 * 100) / 100;
                             emulator_dpx_class_value = Math.round((emulator_dpi_class_value / 96) * 100) / 100;
                         }
-                        //Przydzielanie DPI--------------------------------------------------------------------------------------------------------------------------------------------
                         if (
                             (emulator_dpi_class_type === '' && (emulator_dpi_class_value === emulator_dpi_value || emulator_dpx_class_value === emulator_dpx_value || emulator_dcm_class_value === emulator_dcm_value)) ||
                             (emulator_dpi_class_type === 'min' && (emulator_dpi_class_value <= emulator_dpi_value || emulator_dpx_class_value <= emulator_dpx_value || emulator_dcm_class_value <= emulator_dcm_value)) ||
@@ -65,7 +61,7 @@ setInterval(() => {
                             emulator_addClass(emulator_dpi_class_name, emulator_media_query[emulator_key], 1);
                         }
                     }
-                    //Monochrome-------------------------------------------------------------------------------------------------------------------------------------------------------
+                    //Monochrome
                     if ((emulator_key.startsWith('emulator_min_monochrome') || emulator_key.startsWith('emulator_max_monochrome')) && data.monochrome != 0 && data.monochrome_filter == 0) {
                         emulator_monochrome_type = emulator_key.split('emulator_')[1].split('_monochrome_')[0];
                         emulator_monochrome_value = parseFloat(emulator_key.split('emulator_')[1].split('_monochrome_')[1]);
@@ -84,13 +80,13 @@ setInterval(() => {
                             emulator_addClass('emulator-spanning-single-fold-vertical', emulator_media_query['emulator_spanning_single_fold_vertical'], 1);
                         }
                     }
-                    //Color scheme-----------------------------------------------------------------------------------------------------------------------------------------------------
+                    //Color scheme
                     if (emulator_panel['color_scheme'] == 'light') {
                         emulator_addClass('emulator-prefers-color-scheme-light', emulator_media_query['emulator_prefers_color_scheme_light'], 1);
                     } else if (emulator_panel['color_scheme'] == 'dark') {
                         emulator_addClass('emulator-prefers-color-scheme-dark', emulator_media_query['emulator_prefers_color_scheme_dark'], 1);
                     }
-                    //Contrast---------------------------------------------------------------------------------------------------------------------------------------------------------
+                    //Contrast
                     if (emulator_panel['contrast'] == 'no-preference') {
                         emulator_addClass('emulator-prefers-contrast-no-preference', emulator_media_query['emulator_prefers_contrast_no_preference'], 1);
                     } else if (emulator_panel['contrast'] == 'custom') {
@@ -100,19 +96,19 @@ setInterval(() => {
                     } else if (emulator_panel['contrast'] == 'more') {
                         emulator_addClass('emulator-prefers-contrast-more', emulator_media_query['emulator_prefers_contrast_more'], 1);
                     }
-                    //Reduced motion---------------------------------------------------------------------------------------------------------------------------------------------------
+                    //Reduced motion
                     if (emulator_panel['reduced_motion'] == 'no-preference') {
                         emulator_addClass('emulator-prefers-reduced-motion-no-preference', emulator_media_query['emulator_prefers_reduced_motion_no_preference'], 1);
                     } else if (emulator_panel['reduced_motion'] == 'reduce') {
                         emulator_addClass('emulator-prefers-reduced-motion-reduce', emulator_media_query['emulator_prefers_reduced_motion_reduce'], 1);
                     }
-                    //Reduced transparency---------------------------------------------------------------------------------------------------------------------------------------------
+                    //Reduced transparency
                     if (emulator_panel['reduced_transparency'] == 'no-preference') {
                         emulator_addClass('emulator-prefers-reduced-transparency-no-preference', emulator_media_query['emulator_prefers_reduced_transparency_no_preference'], 1);
                     } else if (emulator_panel['reduced_transparency'] == 'reduce') {
                         emulator_addClass('emulator-prefers-reduced-transparency-reduce', emulator_media_query['emulator_prefers_reduced_transparency_reduce'], 1);
                     }
-                    //Color gamut------------------------------------------------------------------------------------------------------------------------------------------------------
+                    //Color gamut
                     if (emulator_panel['color_gamut'] == 'srgb') {
                         emulator_addClass('emulator-color-gamut-srgb', emulator_media_query['emulator_color_gamut_srgb'], 1);
                     } else if (emulator_panel['color_gamut'] == 'p3') {
@@ -120,65 +116,51 @@ setInterval(() => {
                     } else if (emulator_panel['color_gamut'] == 'rec2020') {
                         emulator_addClass('emulator-color-gamut-rec2020', emulator_media_query['emulator_color_gamut_rec2020'], 1);
                     }
-                    //Forced colors----------------------------------------------------------------------------------------------------------------------------------------------------
+                    //Forced colors
                     if (emulator_panel['forced_colors'] == 'none') {
                         emulator_addClass('emulator-forced-colors-none', emulator_media_query['emulator_forced_colors_none'], 1);
                     } else if (emulator_panel['forced_colors'] == 'active') {
                         emulator_addClass('emulator-forced-colors-active', emulator_media_query['emulator_forced_colors_active'], 1);
-                        // 1. Nadajemy wszystkim elementom klasę emulatora
                         emulator_addClass('emulator-forced-colors-active-forced', '*', 1);
-
-                        // 2. Obliczamy efektywną wartość forced-color-adjust od góry do dołu
                         let emulator_all = document.querySelectorAll('*');
-
-                        // html traktujemy jako auto
                         document.documentElement.dataset.effectiveFCA = 'auto';
 
                         emulator_all.forEach(el => {
                             let emulator_parent = el.parentElement;
                             let emulator_inherited = emulator_parent ? emulator_parent.dataset.effectiveFCA || 'auto' : 'auto';
-
-                            // pobieramy deklarację – najpierw data-*, potem CSS
                             let emulator_declared = el.getAttribute('data-forced-color-adjust') || getComputedStyle(el).getPropertyValue('forced-color-adjust') || 'auto';
                             emulator_declared = emulator_declared.trim();
-
-                            // wyjątek: body zawsze auto
                             if (el.tagName.toLowerCase() === 'body') {
                                 emulator_declared = 'auto';
                             }
 
-                            // ustalamy efektywną wartość
                             let emulator_effective;
                             if (emulator_declared === 'auto' || emulator_declared === 'none') {
                                 emulator_effective = emulator_declared;
                             } else {
                                 emulator_effective = emulator_inherited;
                             }
-
-                            // zapisujemy do dataset
                             el.dataset.effectiveFCA = emulator_effective;
                         });
-
-                        // 3. Usuwamy klasę tam, gdzie efektywna wartość to none
                         emulator_all.forEach(el => {
                             if (el.dataset.effectiveFCA === 'none') {
                                 el.classList.remove('emulator-forced-colors-active-forced');
                             }
                         });
                     }
-                    //Inverted colors--------------------------------------------------------------------------------------------------------------------------------------------------
+                    //Inverted colors
                     if (emulator_panel['inverted_colors'] == 'none') {
                         emulator_addClass('emulator-inverted-colors-none', emulator_media_query['emulator_inverted_colors_none'], 1);
                     } else if (emulator_panel['inverted_colors'] == 'inverted') {
                         emulator_addClass('emulator-inverted-colors-inverted', emulator_media_query['emulator_inverted_colors_inverted'], 1);
                     }
-                    //Dynamic range----------------------------------------------------------------------------------------------------------------------------------------------------
+                    //Dynamic range
                     if (emulator_panel['dynamic_range'] == 'standard') {
                         emulator_addClass('emulator-dynamic-range-standard', emulator_media_query['emulator_dynamic_range_standard'], 1);
                     } else if (emulator_panel['dynamic_range'] == 'high') {
                         emulator_addClass('emulator-dynamic-range-high', emulator_media_query['emulator_dynamic_range_high'], 1);
                     }
-                    //Color------------------------------------------------------------------------------------------------------------------------------------------------------------
+                    //Color
                     if (
                         (emulator_key.startsWith('emulator_min_color') || emulator_key.startsWith('emulator_max_color')) &&
                         !(emulator_key.startsWith('emulator_min_color_index') || emulator_key.startsWith('emulator_max_color_index')) &&
@@ -193,7 +175,7 @@ setInterval(() => {
                     if ((emulator_key == 'emulator_color' && data.color != 0) || (emulator_key == 'emulator_color_0' && data.color == 0) || (emulator_key.startsWith('emulator_color_') && emulator_key.split('_').at(-1) == data.color)) {
                         emulator_addClass(emulator_key.replace(/_/g, '-'), emulator_media_query[emulator_key], 1);
                     }
-                    //Color index------------------------------------------------------------------------------------------------------------------------------------------------------
+                    //Color index
                     if ((emulator_key.startsWith('emulator_min_color_index') || emulator_key.startsWith('emulator_max_color_index')) && data.color_index != 0) {
                         emulator_color_index_value = parseFloat(emulator_key.split('_').at(-1));
                         emulator_color_index_type = emulator_key.split('emulator_')[1].split('color_index_')[0].slice(0, -1);
@@ -208,7 +190,7 @@ setInterval(() => {
                     ) {
                         emulator_addClass(emulator_key.replace(/_/g, '-'), emulator_media_query[emulator_key], 1);
                     }
-                    //Update-----------------------------------------------------------------------------------------------------------------------------------------------------------
+                    //Update
                     if (emulator_panel['update'] == 'fast') {
                         emulator_addClass('emulator-update-fast', emulator_media_query['emulator_update_fast'], 1);
                     } else if (emulator_panel['update'] == 'slow') {
@@ -216,13 +198,13 @@ setInterval(() => {
                     } else if (emulator_panel['update'] == 'none') {
                         emulator_addClass('emulator-update-none', emulator_media_query['emulator_update_none'], 1);
                     }
-                    //Grid-------------------------------------------------------------------------------------------------------------------------------------------------------------
+                    //Grid
                     if (emulator_panel['grid'] == '0') {
                         emulator_addClass('emulator-grid-0', emulator_media_query['emulator_grid_0'], 1);
                     } else if (emulator_panel['grid'] == '1') {
                         emulator_addClass('emulator-grid-1', emulator_media_query['emulator_grid_1'], 1);
                     }
-                    //Display mode-----------------------------------------------------------------------------------------------------------------------------------------------------
+                    //Display mode
                     if (emulator_panel['display_mode'] == 'browser') {
                         emulator_addClass('emulator-display-mode-browser', emulator_media_query['emulator_display_mode_browser'], 1);
                     } else if (emulator_panel['display_mode'] == 'fullscreen') {
@@ -236,7 +218,7 @@ setInterval(() => {
                     } else if (emulator_panel['display_mode'] == 'window-controls-overlay') {
                         emulator_addClass('emulator-display-mode-window-controls-overlay', emulator_media_query['emulator_display_mode_window_controls_overlay'], 1);
                     }
-                    //Overflow block---------------------------------------------------------------------------------------------------------------------------------------------------
+                    //Overflow block
                     if (emulator_panel['overflow_block'] == 'none') {
                         emulator_addClass('emulator-overflow-block-none', emulator_media_query['emulator_overflow_block_none'], 1);
                     } else if (emulator_panel['overflow_block'] == 'paged') {
@@ -246,13 +228,13 @@ setInterval(() => {
                     } else if (emulator_panel['overflow_block'] == 'scroll') {
                         emulator_addClass('emulator-overflow-block-scroll', emulator_media_query['emulator_overflow_block_scroll'], 1);
                     }
-                    //Overflow inline--------------------------------------------------------------------------------------------------------------------------------------------------
+                    //Overflow inline
                     if (emulator_panel['overflow_inline'] == 'none') {
                         emulator_addClass('emulator-overflow-inline-none', emulator_media_query['emulator_overflow_inline_none'], 1);
                     } else if (emulator_panel['overflow_inline'] == 'scroll') {
                         emulator_addClass('emulator-overflow-inline-scroll', emulator_media_query['emulator_overflow_inline_scroll'], 1);
                     }
-                    //Wekit transform 3d-----------------------------------------------------------------------------------------------------------------------------------------------
+                    //Wekit transform 3D
                     if (emulator_panel['wekit_transform_3d'] == 'true') {
                         if (emulator_media_query['emulator__webkit_transform_3d_true'] != undefined) {
                             emulator_addClass('emulator--webkit-transform-3d-true', emulator_media_query['emulator__webkit_transform_3d_true'], 1);
@@ -263,7 +245,7 @@ setInterval(() => {
                     } else if (emulator_panel['wekit_transform_3d'] == 'false' && emulator_media_query['emulator__webkit_transform_3d_false'] != undefined) {
                         emulator_addClass('emulator--webkit-transform-3d-false', emulator_media_query['emulator__webkit_transform_3d_false'], 1);
                     }
-                    //Scripting--------------------------------------------------------------------------------------------------------------------------------------------------------
+                    //Scripting
                     if (emulator_panel['scripting'] == 'enabled') {
                         emulator_addClass('emulator-scripting-enabled', emulator_media_query['emulator_scripting_enabled'], 1);
                     } else if (emulator_panel['scripting'] == 'initial-only') {
@@ -271,7 +253,7 @@ setInterval(() => {
                     } else if (emulator_panel['scripting'] == 'none') {
                         emulator_addClass('emulator-scripting-none', emulator_media_query['emulator_scripting_none'], 1);
                     }
-                    //Pointer----------------------------------------------------------------------------------------------------------------------------------------------------------
+                    //Pointer
                     switch (emulator_panel['pointer']) {
                         case 'fine':
                             emulator_addClass('emulator-pointer-fine', emulator_media_query['emulator_pointer_fine'], 1);
@@ -339,7 +321,7 @@ setInterval(() => {
                             emulator_addClass('emulator-any-pointer-none', emulator_media_query['emulator_any_pointer_none'], 1);
                             break;
                     }
-                    //Hover------------------------------------------------------------------------------------------------------------------------------------------------------------
+                    //Hover
                     switch (emulator_panel['hover']) {
                         case 'none':
                             emulator_addClass('emulator-hover-none', emulator_media_query['emulator_hover_none'], 1);
@@ -364,9 +346,9 @@ setInterval(() => {
                 }
             }
             emulator_first_loop = 1;
-            //Koniec IFa---------------------------------------------------------------------------------------------------------------------------------------------------------------
+            //End of IF
             for (const emulator_key in data) {
-                //Orientation----------------------------------------------------------------------------------------------------------------------------------------------------------
+                //Orientation
                 if (emulator_panel['orientation'] == 'portrait') {
                     emulator_addClass('emulator-orientation-portrait', emulator_media_query['emulator_orientation_portrait'], 1);
                     emulator_addClass('emulator-orientation-landscape', emulator_media_query['emulator_orientation_landscape'], 0);
@@ -374,7 +356,7 @@ setInterval(() => {
                     emulator_addClass('emulator-orientation-portrait', emulator_media_query['emulator_orientation_portrait'], 0);
                     emulator_addClass('emulator-orientation-landscape', emulator_media_query['emulator_orientation_landscape'], 1);
                 }
-                //Devive posture-------------------------------------------------------------------------------------------------------------------------------------------------------
+                //Devive posture
                 if (emulator_panel['device_posture'] == 'folded') {
                     emulator_addClass('emulator-device-posture-folded', emulator_media_query['emulator_device_posture_folded'], 1);
                     emulator_addClass('emulator-device-posture-continuous', emulator_media_query['emulator_device_posture_continuous'], 0);
@@ -382,7 +364,7 @@ setInterval(() => {
                     emulator_addClass('emulator-device-posture-folded', emulator_media_query['emulator_device_posture_folded'], 0);
                     emulator_addClass('emulator-device-posture-continuous', emulator_media_query['emulator_device_posture_continuous'], 1);
                 }
-                //Screen fold posture--------------------------------------------------------------------------------------------------------------------------------------------------
+                //Screen fold posture
                 document.documentElement.style.setProperty('--emulator-screen-fold-angle', emulator_panel['screen_fold_angle']);
 
                 if (emulator_panel['screen_fold_posture'] == 'book') {
@@ -417,7 +399,7 @@ setInterval(() => {
                     emulator_addClass('emulator-screen-fold-posture-tablet', emulator_media_query['emulator_screen_fold_posture_tablet'], 1);
                 }
                 Object.keys(emulator_media_query).forEach(emulator_key => {
-                    //Aspect ratio-----------------------------------------------------------------------------------------------------------------------------------------------------
+                    //Aspect ratio
                     if (emulator_key.startsWith('emulator_aspect_ratio_')) {
                         v_ar = emulator_nar(window.innerWidth, window.innerHeight);
                         c_ar = emulator_nar(emulator_key.split('_').at(-2), emulator_key.split('_').at(-1));
@@ -427,7 +409,7 @@ setInterval(() => {
                             emulator_addClass('emulator-aspect-ratio-' + v_ar[0] + '-' + v_ar[1], emulator_media_query['emulator_aspect_ratio_' + v_ar[0] + '_' + v_ar[1]], 1);
                         } else emulator_addClass('emulator-aspect-ratio-' + v_ar[0] + '-' + v_ar[1], emulator_media_query['emulator_aspect_ratio_' + v_ar[0] + '_' + v_ar[1]], 0);
                     }
-                    //Device aspect ratio----------------------------------------------------------------------------------------------------------------------------------------------
+                    //Device aspect ratio
                     if (emulator_key.startsWith('emulator_device_aspect_ratio_')) {
                         v_ar = emulator_nar(emulator_panel['win_width'], emulator_panel['win_height']);
                         c_ar = emulator_nar(emulator_key.split('_').at(-2), emulator_key.split('_').at(-1));
@@ -437,7 +419,7 @@ setInterval(() => {
                             emulator_addClass('emulator-device-aspect-ratio-' + v_ar[0] + '-' + v_ar[1], emulator_media_query['emulator_device_aspect_ratio_' + v_ar[0] + '_' + v_ar[1]], 1);
                         } else emulator_addClass('emulator-device-aspect-ratio-' + v_ar[0] + '-' + v_ar[1], emulator_media_query['emulator_device_aspect_ratio_' + v_ar[0] + '_' + v_ar[1]], 0);
                     }
-                    //Viewport size----------------------------------------------------------------------------------------------------------------------------------------------------
+                    //Viewport size
                     if (
                         emulator_key.startsWith('emulator_width_') ||
                         emulator_key.startsWith('emulator_min_width_') ||
@@ -477,7 +459,7 @@ setInterval(() => {
                             emulator_addClass(emulator_key.replace(/_/g, '-'), emulator_media_query[emulator_key], 1);
                         }
                     }
-                    //Device size------------------------------------------------------------------------------------------------------------------------------------------------------
+                    //Device size
                     if (
                         emulator_key.startsWith('emulator_device_width_') ||
                         emulator_key.startsWith('emulator_device_min_width_') ||
@@ -523,7 +505,7 @@ setInterval(() => {
             }
         });
 }, 100);
-//Add/Remove class---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Add/Remove class
 function emulator_addClass(css_class, css_objects, emulator_action_type) {
     if (!css_class || !css_objects) return;
     document.querySelectorAll(css_objects).forEach(el => {
@@ -534,7 +516,7 @@ function emulator_addClass(css_class, css_objects, emulator_action_type) {
         }
     });
 }
-//Aspect ratio-------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Aspect ratio
 function emulator_gcd(a, b) {
     a = Math.abs(parseInt(a));
     b = Math.abs(parseInt(b));
@@ -544,7 +526,7 @@ function emulator_nar(width, height) {
     const emulator_divisor = emulator_gcd(width, height);
     return [width / emulator_divisor, height / emulator_divisor];
 }
-//Coverter for (device) width/height---------------------------------------------------------------------------------------------------------------------------------------------------
+//Coverter for (device) width/height
 function emulator_convertToPx(emulator_value, emulator_unit, baseFontSize = 16) {
     const emulator_dpi = emulator_panel['dpi'];
     const emulator_unitToPx = {

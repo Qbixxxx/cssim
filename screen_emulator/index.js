@@ -17,7 +17,6 @@ function centerWindow(width, height) {
     newWin1.setBounds({ x, y, width, height });
 }
 
-// 🧠 Obsługa IPC
 ipcMain.on('app-quit', () => app.quit());
 
 ipcMain.on('close-current-window', event => {
@@ -97,7 +96,6 @@ let cssVariables = {
     '--emulator-titlebar-area-y': '0'
 };
 
-// Funkcja nadpisująca plik CSS kompletnym zestawem zmiennych
 let contrasttype = 'none';
 function saveVariablesToFile(vars) {
     const lines = [':root {'];
@@ -136,7 +134,6 @@ ipcMain.handle('contrast-type', (event, contrast_type_value) => {
     saveVariablesToFile(cssVariables);
 });
 
-// IPC - ustawia pojedynczą zmienną i od razu zapisuje do pliku
 ipcMain.handle('set-css-variable', (event, key, value) => {
     if (value === null) {
         delete cssVariables[key];
@@ -147,14 +144,12 @@ ipcMain.handle('set-css-variable', (event, key, value) => {
     return true;
 });
 
-// IPC - dodaje nową zmienną i zapisuje do pliku (praktycznie to samo co set)
 ipcMain.handle('add-css-variable', (event, key, value) => {
     cssVariables[key] = value;
     saveVariablesToFile(cssVariables);
     return true;
 });
 
-// IPC - zwraca wszystkie zmienne
 ipcMain.handle('get-css-variables', () => {
     return cssVariables;
 });
@@ -169,8 +164,8 @@ app.whenReady().then(() => {
         webPreferences: {
             preload: path.join(__dirname, 'preload.js'),
             contextIsolation: true,
-            nodeIntegration: false
-            //devTools: false
+            nodeIntegration: false,
+            devTools: false
         }
     });
     mainWindow.loadFile('emulator/index.html');

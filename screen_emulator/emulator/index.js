@@ -1,4 +1,4 @@
-//Variables update---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Variables update
 win_width = document.getElementById('window_width');
 win_height = document.getElementById('window_height');
 scale = document.getElementById('window_modifier');
@@ -138,7 +138,6 @@ navigation_bar_bottom.addEventListener('change', () => {
         }
     }
 });
-//------------------------------------------------------------------
 const inputs = [safe_area_inset_left, safe_area_inset_right, safe_area_inset_top, safe_area_inset_bottom, titlebar_area_width, titlebar_area_height, titlebar_area_x, titlebar_area_y];
 const inputToCSS = {
     safe_area_inset_left: '--emulator-safe-area-inset-left',
@@ -150,7 +149,6 @@ const inputToCSS = {
     titlebar_area_x: '--emulator-titlebar-area-x',
     titlebar_area_y: '--emulator-titlebar-area-y'
 };
-// Dla każdego inputa osobno
 inputs.forEach(input => {
     async function envValues() {
         for (const input of inputs) {
@@ -165,7 +163,7 @@ inputs.forEach(input => {
     input.addEventListener('change', envValues);
     window.addEventListener('load', envValues);
 });
-//Form validation----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Form validation
 function manageObj(el, action) {
     if (action == 0) {
         //hide
@@ -217,7 +215,7 @@ function formCheck() {
     if (input_dpi.value <= 0) {
         input_dpi.value = 1;
     }
-    //Data update----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //Data update
     newData.win_width = win_width.value;
     newData.win_height = win_height.value;
     newData.viewport_width = win_width.value - navigation_bar_left.value - navigation_bar_right.value;
@@ -306,7 +304,7 @@ function formCheck() {
     newData.titlebar_area_height = titlebar_area_height.value;
     newData.titlebar_area_x = titlebar_area_x.value;
     newData.titlebar_area_y = titlebar_area_y.value;
-    //Display diagonal field, block DPI------------------------------------------------------------------------------------------------------------------------------------------------
+    //Display diagonal field, block DPI
     if (checkbox_diagonal.checked) {
         manageObj(list_diagonal, 1);
         manageObj(input_dpi, 2);
@@ -327,7 +325,7 @@ function formCheck() {
     }
     window.appAPI.saveJson(newData);
 
-    //Device type detection------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //Device type detection
     let device_type = '16_9';
     if (forced_colors.value == 'active' && inverted_colors.value == 'inverted') {
         device_type = '16_9_contrast_inverted';
@@ -397,14 +395,14 @@ function formCheck() {
     }
     document.querySelector('aside').style.backgroundImage = `url(devices/${device_type}.png)`;
 }
-//DPI calculations---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//DPI calculations
 function dpiCalc() {
     if (checkbox_diagonal.checked) {
         input_dpi.value = Math.round((Math.sqrt(Math.pow(win_width.value, 2) + Math.pow(win_height.value, 2)) / input_diagonal.value) * 100) / 100;
     } else input_dpi.value = Math.round(input_dpi.value * 100) / 100;
     newData.dpi = input_dpi.value;
 }
-//Start screen emulating---------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Start screen emulating
 document.getElementById('openWindow').addEventListener('click', () => {
     document.getElementById('iframe_panel').src = document.getElementById('iframe_panel').src;
     document.getElementById('iframe_panel').style.display = 'block';
@@ -417,7 +415,7 @@ document.getElementById('openWindow').addEventListener('click', () => {
     window.appAPI.saveJson(newData);
     window.appAPI.openNewWindow(document.getElementById('window_width').value / modifier, document.getElementById('window_height').value / modifier, 2, modifier);
 });
-//Stop screen emulating----------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Stop screen emulating
 async function closeWindow() {
     document.getElementById('iframe_panel').style.display = 'none';
     manageObj(document.getElementById('closeWindow'), 2);
@@ -425,7 +423,7 @@ async function closeWindow() {
     window.appAPI.closeNewWin1();
     formCheck();
 }
-//Rendering data-----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Rendering data
 async function copyAndAnalyze() {
     const copyOk = await window.appAPI.copyProjectFiles();
     if (copyOk) {
@@ -445,7 +443,7 @@ async function copyAndAnalyze() {
         console.error('Failed to copy files.');
     }
 }
-//Scrolling options--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Scrolling options
 container.addEventListener('mousedown', e => {
     isDown = true;
     container.classList.add('active');
@@ -468,7 +466,7 @@ container.addEventListener('mousemove', e => {
     container.scrollTop = scrollTop - walkY;
 });
 
-//Viewports----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Viewports
 let segments = {};
 let existingSegments = new Set();
 
@@ -530,7 +528,6 @@ function findFirstFreeCoord() {
     while (existingSegments.has(`${x}_${y}`)) {
         x++;
         if (x > 1000) {
-            // zabezpieczenie
             x = 0;
             y++;
         }
@@ -556,7 +553,6 @@ function handleFreeCoordChange(oldId, xInput, yInput) {
 
     if (newId === oldId) return;
 
-    // przenosimy dane
     segments[newId] = { ...segments[oldId] };
     delete segments[oldId];
     existingSegments.delete(oldId);
@@ -566,7 +562,6 @@ function handleFreeCoordChange(oldId, xInput, yInput) {
     const baseOld = `viewport_segments_api_${oldX}_${oldY}`;
     const baseNew = `viewport_segments_api_${newX}_${newY}`;
 
-    // aktualizujemy wszystkie elementy w tym segmencie
     const container = xInput.closest('tbody') || xInput.closest('table');
     container.querySelectorAll(`[id^="${baseOld}"]`).forEach(el => {
         const newElId = el.id.replace(baseOld, baseNew);
@@ -584,7 +579,6 @@ function handleFreeCoordChange(oldId, xInput, yInput) {
         }
     });
 
-    // przycisk remove
     const btn = container.querySelector(`button[onclick="removeSegment('${oldId}')"]`);
     if (btn) btn.setAttribute('onclick', `removeSegment('${newId}')`);
 
@@ -597,7 +591,6 @@ function createSegmentHTML(x, y) {
     const id = `${x}_${y}`;
 
     if (!checkbox_viewport_segments_api_free_mode.checked) {
-        // Tryb kontrolowany
         return `
         <tr>
             <th colspan="2">
@@ -624,7 +617,6 @@ function createSegmentHTML(x, y) {
             </td>
         </tr>`;
     } else {
-        // Tryb free mode — bez walidacji, z ręczną zmianą X/Y
         return `
         <tr>
             <th colspan="2">
@@ -667,12 +659,9 @@ function handleValueChange(id, key, el) {
     const viewportWidth = parseInt(win_width.value, 10);
     const viewportHeight = parseInt(win_height.value, 10);
 
-    // Wstępnie ustaw nową wartość marginesu
     seg[key] = val;
 
     if (!checkbox_viewport_segments_api_free_mode.checked) {
-        // Tryb automatyczny — pełna walidacja i przeliczenia
-
         let newWidth = viewportWidth - seg.left - seg.right;
         let newHeight = viewportHeight - seg.top - seg.bottom;
 
@@ -724,25 +713,18 @@ function handleValueChange(id, key, el) {
 
         updateInputsAndCSS(id, seg);
     } else {
-        // Tryb free mode — brak walidacji marginesów
-
-        // Jeśli zmieniamy pole, które odpowiada za ID (np. 'id' albo 'coord'),
-        // to przenosimy dane tak jak w handleCoordChangeFull, ale bez blokad
         if (key === 'coord') {
             const newId = el.value;
 
-            // Jeśli taki ID już istnieje, to robimy go unikalnym
             let finalId = newId;
             let counter = 1;
             while (segments[finalId]) {
                 finalId = `${newId}_${counter++}`;
             }
 
-            // Przenieś dane do nowego ID
             segments[finalId] = { ...segments[id] };
             delete segments[id];
 
-            // Zmieniamy ID w DOM
             const [oldX, oldY] = id.split('_');
             const [newX, newY] = finalId.split('_');
             const baseOld = `viewport_segments_api_${oldX}_${oldY}`;
@@ -760,7 +742,6 @@ function handleValueChange(id, key, el) {
             const btn = document.querySelector(`button[onclick="removeSegment('${id}')"]`);
             if (btn) btn.setAttribute('onclick', `removeSegment('${finalId}')`);
         } else {
-            // Zwykła zmiana wartości w free mode
             seg[key] = val;
         }
 
@@ -802,13 +783,11 @@ async function handleCoordChangeFull(oldId, selectEl) {
         return;
     }
 
-    // Przenieś dane
     segments[newId] = { ...segments[oldId] };
     delete segments[oldId];
     existingSegments.delete(oldId);
     existingSegments.add(newId);
 
-    // Zamień ID w DOM
     const [oldX, oldY] = oldId.split('_');
     const [newX, newY] = newId.split('_');
     const baseOld = `viewport_segments_api_${oldX}_${oldY}`;
@@ -892,7 +871,6 @@ function autoLayoutSegmentSizes() {
         segmentsByCol[x].add(y);
     }
 
-    // Oblicz szerokości wierszy
     const rowWidths = {};
     for (const y in segmentsByRow) {
         const xList = [...segmentsByRow[y]].sort((a, b) => a - b);
@@ -908,7 +886,6 @@ function autoLayoutSegmentSizes() {
         });
     }
 
-    // 🔧 Nowy sposób liczenia wysokości — wspólne yList dla wszystkich kolumn
     const allYSet = new Set();
     for (const x in segmentsByCol) {
         for (const y of segmentsByCol[x]) {
@@ -928,7 +905,6 @@ function autoLayoutSegmentSizes() {
         usedHeight += height;
     });
 
-    // Przypisz tylko te y, które są w danej kolumnie
     const colHeights = {};
     for (const x in segmentsByCol) {
         colHeights[x] = {};
@@ -937,7 +913,6 @@ function autoLayoutSegmentSizes() {
         }
     }
 
-    // Teraz marginesy
     for (const id in segments) {
         const [x, y] = id.split('_').map(Number);
 
@@ -1030,8 +1005,8 @@ async function removeViewportCSSVars(id) {
     const [x, y] = id.split('_');
     for (const key of ['width', 'height', 'left', 'top', 'right', 'bottom']) {
         const cssVar = `--emulator-viewport-segment-${key}-${x}-${y}`;
-        await window.appAPI.setVariable(cssVar, null); // usuwa z JSON
-        document.documentElement.style.removeProperty(cssVar); // usuwa z DOM
+        await window.appAPI.setVariable(cssVar, null);
+        document.documentElement.style.removeProperty(cssVar);
     }
 }
 
@@ -1069,7 +1044,7 @@ document.getElementById('button_screen_fold_api_add_segment').addEventListener('
 checkbox_viewport_segments_api_free_mode.addEventListener('change', () => {
     removeAllSegments();
 });
-//Iframe message listener--------------------------------------------------------------------------------------------------------------------------------------------------------------
+//Iframe message listener
 window.addEventListener('message', event => {
     if (event.data.type === 'resize') {
         document.getElementById('iframe_panel').style.height = event.data.height + 'px';
