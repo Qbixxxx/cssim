@@ -32,9 +32,16 @@ Information about updates will appear here.
 
 ---
 
+## [1.1.4] - 15.09.2025
+
+- Monochrome filters has been improved. Anti-aliasing still messes up filters, but it works a little better.
+
+---
+
 ## [1.1.3] - 09.09.2025
 
 - Fixed bugs related to :root.
+- Better comments in the code.
 
 ---
 
