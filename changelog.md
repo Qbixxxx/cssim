@@ -6,7 +6,7 @@ Information about updates will appear here.
 ---
 
 ## 🐞 Known Issues
-
+- Browser's anti-aliasing meses up monochrome filers.
 - The comments in the scripts are rough and partly not in English.
 - When scaling a window, if fractions occur, the window has random dimensions.
 
