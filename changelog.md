@@ -9,7 +9,7 @@ Information about updates will appear here.
 - Browser's anti-aliasing meses up monochrome filers.
 - When scaling a window, if fractions occur, the window has random dimensions.
 
-  👉 Do not set, for example, 1283 at 50% scaling.
+  👉 Do not set, for example, 1283px at 50% scaling.
 - The algorithm that calculates the available viewport IDs sometimes gives wrong IDs.
 
   👉 Ignore it, or use free mode. 
