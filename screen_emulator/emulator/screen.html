@@ -91,16 +91,18 @@
                         iframe.style.filter = 'url(#color-filter)';
                     }
                 });
-            fetch('panel.json')
-                .then(res => res.json())
-                .then(data => {
-                    emulator_container.style.width = window_width + 'px';
-                    emulator_container.style.height = window_height + 'px';
-                    iframe.style.width = window_width * mod + 'px';
-                    iframe.style.height = window_height * mod + 'px';
+            setTimeout(() => {
+                fetch('panel.json')
+                    .then(res => res.json())
+                    .then(data => {
+                        emulator_container.style.width = window_width + 'px';
+                        emulator_container.style.height = window_height + 'px';
+                        iframe.style.width = window_width * mod + 'px';
+                        iframe.style.height = window_height * mod + 'px';
 
-                    iframe.contentWindow.postMessage(payload, '*');
-                });
+                        iframe.contentWindow.postMessage(payload, '*');
+                    });
+            }, 200);
         </script>
     </body>
 </html>
