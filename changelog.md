@@ -31,6 +31,12 @@ Information about updates will appear here.
 
 ---
 
+## [1.1.5] - 15.09.2025
+
+- JS used to load faster than the emulator's iframe, which caused errors with innerHeight and innerWidth. Now the page is loaded only after the dimensions of window are set.
+
+---
+
 ## [1.1.4] - 15.09.2025
 
 - Monochrome filters has been improved. Anti-aliasing still messes up filters, but it works a little better.
