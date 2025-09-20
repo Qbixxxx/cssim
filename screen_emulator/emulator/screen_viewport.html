@@ -4,7 +4,7 @@
     </head>
     <body id="viewport">
         <div id="emulator_container">
-            <iframe src="http://localhost/screen_emulator/render/index.html" style="transform-origin: 0 0"></iframe>
+            <iframe style="transform-origin: 0 0"></iframe>
         </div>
         <script>
             let mod;
@@ -43,6 +43,7 @@
                 emulator_container.style.height = viewport_height + 'px';
                 iframe.style.width = viewport_width + 'px';
                 iframe.style.height = viewport_height + 'px';
+                iframe.src = 'http://localhost/screen_emulator/render/index.html';
                 emulator_container.style.left = navigation_bar_left + 'px';
                 emulator_container.style.top = navigation_bar_top + 'px';
             }
