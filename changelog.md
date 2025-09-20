@@ -31,7 +31,7 @@ Information about updates will appear here.
 
 ---
 
-## [1.1.5] - 15.09.2025
+## [1.1.5] - 20.09.2025
 
 - JS used to load faster than the emulator's iframe, which caused errors with innerHeight and innerWidth. Now the page is loaded only after the dimensions of window are set.
 
