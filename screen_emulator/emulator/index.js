@@ -57,50 +57,7 @@ let startX;
 let startY;
 let scrollLeft;
 let scrollTop;
-onChangeElements = [
-    checkbox_screen_fold_api,
-    list_viewport_segments_api,
-    checkbox_diagonal,
-    input_diagonal,
-    win_width,
-    win_height,
-    input_dpi,
-    scale,
-    checkbox_viewport_segments_api,
-    color,
-    color_gamut,
-    color_index,
-    forced_colors,
-    forced_colors_type,
-    inverted_colors,
-    monochrome,
-    monochrome_color,
-    checkbox_monochrome,
-    dynamic_range,
-    color_scheme,
-    contrast,
-    reduced_motion,
-    reduced_transparency,
-    update,
-    grid_type,
-    display_mode,
-    overflow_block,
-    overflow_inline,
-    wekit_transform_3d,
-    browser,
-    scripting,
-    hover,
-    pointer,
-    screen_fold_api_max,
-    safe_area_inset_left,
-    safe_area_inset_right,
-    safe_area_inset_top,
-    safe_area_inset_bottom,
-    titlebar_area_width,
-    titlebar_area_height,
-    titlebar_area_x,
-    titlebar_area_y
-];
+onChangeElements = [checkbox_screen_fold_api, list_viewport_segments_api, checkbox_diagonal, input_diagonal, win_width, win_height, input_dpi, scale, checkbox_viewport_segments_api, color, color_gamut, color_index, forced_colors, forced_colors_type, inverted_colors, monochrome, monochrome_color, checkbox_monochrome, dynamic_range, color_scheme, contrast, reduced_motion, reduced_transparency, update, grid_type, display_mode, overflow_block, overflow_inline, wekit_transform_3d, browser, scripting, hover, pointer, screen_fold_api_max, safe_area_inset_left, safe_area_inset_right, safe_area_inset_top, safe_area_inset_bottom, titlebar_area_width, titlebar_area_height, titlebar_area_x, titlebar_area_y];
 onChangeElements.forEach(element => {
     element.addEventListener('change', () => {
         formCheck();
@@ -393,7 +350,7 @@ function formCheck() {
     if (update.value == 'none') {
         device_type = 'printer';
     }
-    document.querySelector('aside').style.backgroundImage = `url(devices/${device_type}.png)`;
+    document.querySelector('aside').style.backgroundImage = `url(devices/${device_type}.avif)`;
 }
 //DPI calculations
 function dpiCalc() {
