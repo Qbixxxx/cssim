@@ -34,7 +34,8 @@ Information about updates will appear here.
 ## [1.1.6] - 24.09.2025
 
 - Files have been optimized. Now the project takes up 440kB less disk space!
-- Unnecessary console.log() statements have been removed, and the remaining ones have been translated into English. 
+- Fixed bugs with selectors starting with ::. They caused QSA function errors, and the CSS file conversion itself was broken.
+- Unnecessary console.log() statements have been removed, and the remaining ones have been translated into English.
 
 ---
 
