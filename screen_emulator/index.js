@@ -123,9 +123,9 @@ function saveVariablesToFile(vars) {
     const cssContent = lines.join('\n');
     try {
         fs.writeFileSync(cssFilePath, cssContent, 'utf8');
-        console.log(`Zapisano zmienne CSS do ${cssFilePath}`);
+        console.log(`CSS variables saved to ${cssFilePath}`);
     } catch (err) {
-        console.error('Błąd zapisu pliku CSS:', err);
+        console.error('CSS file save error:', err);
     }
 }
 

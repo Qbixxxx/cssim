@@ -53,11 +53,7 @@ setInterval(() => {
                             emulator_dpi_class_value = Math.round(emulator_dcm_class_value * 2.54 * 100) / 100;
                             emulator_dpx_class_value = Math.round((emulator_dpi_class_value / 96) * 100) / 100;
                         }
-                        if (
-                            (emulator_dpi_class_type === '' && (emulator_dpi_class_value === emulator_dpi_value || emulator_dpx_class_value === emulator_dpx_value || emulator_dcm_class_value === emulator_dcm_value)) ||
-                            (emulator_dpi_class_type === 'min' && (emulator_dpi_class_value <= emulator_dpi_value || emulator_dpx_class_value <= emulator_dpx_value || emulator_dcm_class_value <= emulator_dcm_value)) ||
-                            (emulator_dpi_class_type === 'max' && (emulator_dpi_class_value >= emulator_dpi_value || emulator_dpx_class_value >= emulator_dpx_value || emulator_dcm_class_value >= emulator_dcm_value))
-                        ) {
+                        if ((emulator_dpi_class_type === '' && (emulator_dpi_class_value === emulator_dpi_value || emulator_dpx_class_value === emulator_dpx_value || emulator_dcm_class_value === emulator_dcm_value)) || (emulator_dpi_class_type === 'min' && (emulator_dpi_class_value <= emulator_dpi_value || emulator_dpx_class_value <= emulator_dpx_value || emulator_dcm_class_value <= emulator_dcm_value)) || (emulator_dpi_class_type === 'max' && (emulator_dpi_class_value >= emulator_dpi_value || emulator_dpx_class_value >= emulator_dpx_value || emulator_dcm_class_value >= emulator_dcm_value))) {
                             emulator_addClass(emulator_dpi_class_name, emulator_media_query[emulator_key], 1);
                         }
                     }
@@ -73,7 +69,6 @@ setInterval(() => {
                         emulator_addClass(emulator_key.replace(/_/g, '-'), emulator_media_query[emulator_key], 1);
                     }
                     if (emulator_key.startsWith('emulator_spanning')) {
-                        console.log(data.spanning);
                         if (data.spanning == 'single-fold-horizontal') {
                             emulator_addClass('emulator-spanning-single-fold-horizontal', emulator_media_query['emulator_spanning_single_fold_horizontal'], 1);
                         } else if (data.spanning == 'single-fold-vertical') {
@@ -161,11 +156,7 @@ setInterval(() => {
                         emulator_addClass('emulator-dynamic-range-high', emulator_media_query['emulator_dynamic_range_high'], 1);
                     }
                     //Color
-                    if (
-                        (emulator_key.startsWith('emulator_min_color') || emulator_key.startsWith('emulator_max_color')) &&
-                        !(emulator_key.startsWith('emulator_min_color_index') || emulator_key.startsWith('emulator_max_color_index')) &&
-                        data.color != 0
-                    ) {
+                    if ((emulator_key.startsWith('emulator_min_color') || emulator_key.startsWith('emulator_max_color')) && !(emulator_key.startsWith('emulator_min_color_index') || emulator_key.startsWith('emulator_max_color_index')) && data.color != 0) {
                         emulator_color_value = parseFloat(emulator_key.split('_').at(-1));
                         emulator_color_type = emulator_key.split('emulator_')[1].split('color_')[0].slice(0, -1);
                         if (((emulator_color_type == 'min' && emulator_color_value <= data.color) || (emulator_color_type == 'max' && emulator_color_value >= data.color)) && emulator_color_value != 0) {
@@ -183,11 +174,7 @@ setInterval(() => {
                             emulator_addClass(emulator_key.replace(/_/g, '-'), emulator_media_query[emulator_key], 1);
                         }
                     }
-                    if (
-                        (emulator_key == 'emulator_color_index' && data.color_index != 0) ||
-                        (emulator_key == 'emulator_color_index_0' && data.color_index == 0) ||
-                        (emulator_key.startsWith('emulator_color_index_') && emulator_key.split('_').at(-1) == data.color_index)
-                    ) {
+                    if ((emulator_key == 'emulator_color_index' && data.color_index != 0) || (emulator_key == 'emulator_color_index_0' && data.color_index == 0) || (emulator_key.startsWith('emulator_color_index_') && emulator_key.split('_').at(-1) == data.color_index)) {
                         emulator_addClass(emulator_key.replace(/_/g, '-'), emulator_media_query[emulator_key], 1);
                     }
                     //Update
@@ -403,8 +390,6 @@ setInterval(() => {
                     if (emulator_key.startsWith('emulator_aspect_ratio_')) {
                         v_ar = emulator_nar(window.innerWidth, window.innerHeight);
                         c_ar = emulator_nar(emulator_key.split('_').at(-2), emulator_key.split('_').at(-1));
-                        console.log(window.innerWidth);
-                        console.log(window.innerHeight);
                         if (v_ar[0] == c_ar[0] || v_ar[1] == c_ar[1]) {
                             emulator_addClass('emulator-aspect-ratio-' + v_ar[0] + '-' + v_ar[1], emulator_media_query['emulator_aspect_ratio_' + v_ar[0] + '_' + v_ar[1]], 1);
                         } else emulator_addClass('emulator-aspect-ratio-' + v_ar[0] + '-' + v_ar[1], emulator_media_query['emulator_aspect_ratio_' + v_ar[0] + '_' + v_ar[1]], 0);
@@ -413,21 +398,12 @@ setInterval(() => {
                     if (emulator_key.startsWith('emulator_device_aspect_ratio_')) {
                         v_ar = emulator_nar(emulator_panel['win_width'], emulator_panel['win_height']);
                         c_ar = emulator_nar(emulator_key.split('_').at(-2), emulator_key.split('_').at(-1));
-                        console.log(window.innerWidth);
-                        console.log(window.innerHeight);
                         if (v_ar[0] == c_ar[0] || v_ar[1] == c_ar[1]) {
                             emulator_addClass('emulator-device-aspect-ratio-' + v_ar[0] + '-' + v_ar[1], emulator_media_query['emulator_device_aspect_ratio_' + v_ar[0] + '_' + v_ar[1]], 1);
                         } else emulator_addClass('emulator-device-aspect-ratio-' + v_ar[0] + '-' + v_ar[1], emulator_media_query['emulator_device_aspect_ratio_' + v_ar[0] + '_' + v_ar[1]], 0);
                     }
                     //Viewport size
-                    if (
-                        emulator_key.startsWith('emulator_width_') ||
-                        emulator_key.startsWith('emulator_min_width_') ||
-                        emulator_key.startsWith('emulator_max_width_') ||
-                        emulator_key.startsWith('emulator_height_') ||
-                        emulator_key.startsWith('emulator_min_height_') ||
-                        emulator_key.startsWith('emulator_max_height_')
-                    ) {
+                    if (emulator_key.startsWith('emulator_width_') || emulator_key.startsWith('emulator_min_width_') || emulator_key.startsWith('emulator_max_width_') || emulator_key.startsWith('emulator_height_') || emulator_key.startsWith('emulator_min_height_') || emulator_key.startsWith('emulator_max_height_')) {
                         const emulator_viewportWidth = emulator_panel['viewport_width'];
                         const emulator_viewportHeight = emulator_panel['viewport_height'];
                         let emulator_match = emulator_key.match(/^emulator_(min_|max_)?(width|height)_(.+)$/);
@@ -460,14 +436,7 @@ setInterval(() => {
                         }
                     }
                     //Device size
-                    if (
-                        emulator_key.startsWith('emulator_device_width_') ||
-                        emulator_key.startsWith('emulator_device_min_width_') ||
-                        emulator_key.startsWith('emulator_device_max_width_') ||
-                        emulator_key.startsWith('emulator_device_height_') ||
-                        emulator_key.startsWith('emulator_device_min_height_') ||
-                        emulator_key.startsWith('emulator_device_max_height_')
-                    ) {
+                    if (emulator_key.startsWith('emulator_device_width_') || emulator_key.startsWith('emulator_device_min_width_') || emulator_key.startsWith('emulator_device_max_width_') || emulator_key.startsWith('emulator_device_height_') || emulator_key.startsWith('emulator_device_min_height_') || emulator_key.startsWith('emulator_device_max_height_')) {
                         const emulator_deviceWidth = emulator_panel['win_width'];
                         const emulator_deviceHeight = emulator_panel['win_height'];
                         let emulator_match = emulator_key.match(/^emulator_device_(min_|max_)?(width|height)_(.+)$/);
@@ -496,8 +465,6 @@ setInterval(() => {
                             emulator_conditionMet = emulator_deviceValue == emulator_pxValue;
                         }
                         if (emulator_conditionMet) {
-                            console.log(emulator_media_query[emulator_key]);
-                            console.log(emulator_key.replace(/_/g, '-'));
                             emulator_addClass(emulator_key.replace(/_/g, '-'), emulator_media_query[emulator_key], 1);
                         }
                     }

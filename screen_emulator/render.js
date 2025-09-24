@@ -67,10 +67,10 @@ function copyProjectToRender() {
     try {
         deleteFolderRecursive(dest);
         copyRecursiveSync(src, dest);
-        console.log('✅ Skopiowano pliki z ./project do ./render');
+        console.log('Copied files from ./project to ./render');
         return true;
     } catch (error) {
-        console.error('❌ Błąd podczas kopiowania:', error);
+        console.error('Error during copying:', error);
         return false;
     }
 }
@@ -160,16 +160,16 @@ async function transformCSSFile(filePath) {
                     const parts = sel.trim().split(/\s+/);
                     let last = parts.pop();
 
-                    const pseudoMatch = last.match(/^(:[a-zA-Z0-9-()]+)$/);
                     let element = '';
                     let pseudo = '';
+                    const match = last.match(/^([^\:]+)?(:{1,2}[a-zA-Z0-9-()]+)?$/);
 
-                    if (pseudoMatch) {
-                        pseudo = last;
+                    if (match) {
+                        element = match[1] || '';
+                        pseudo = match[2] || '';
                     } else {
-                        const match = last.match(/^([^\:]+)(.*)$/);
-                        element = match ? match[1] : last;
-                        pseudo = match ? match[2] : '';
+                        element = last;
+                        pseudo = '';
                     }
 
                     return allClassSelectors.map(className => {
@@ -197,7 +197,7 @@ async function transformCSSFile(filePath) {
     }
 
     fs.writeFileSync(filePath, output, 'utf-8');
-    console.log(`✅ Przekształcono CSS w ${path.basename(filePath)}`);
+    console.log(`CSS has been converted at ${path.basename(filePath)}`);
 }
 
 function parseCSSContent(css) {
@@ -232,21 +232,38 @@ function parseCSSContent(css) {
 
         atRule.walkRules(rule => {
             rule.selectors.forEach(sel => {
-                if (sel.trim() === ':root') {
+                const trimmed = sel.trim();
+
+                // Obsługa :root → zamiana na html z klasą emulatora
+                if (trimmed === ':root') {
                     classSelectors.forEach(className => {
                         selectors.push(`html.${className}`);
                     });
                     return;
                 }
 
-                const pseudoMatch = sel.match(/(:\w+(\([^)]+\))?)+$/g);
+                // Rozpoznanie pseudoklasy/pseudoelementu na końcu
+                const pseudoMatch = trimmed.match(/(:{1,2}[a-zA-Z0-9-]+(?:\([^)]+\))?)$/);
                 let pseudo = '';
-                if (pseudoMatch) pseudo = pseudoMatch[0];
+                let element = trimmed;
 
-                const element = sel.replace(pseudo, '');
+                if (pseudoMatch) {
+                    pseudo = pseudoMatch[0];
+                    element = trimmed.slice(0, -pseudo.length).trim();
+                }
 
+                // Pomijamy selektory, które są tylko pseudoelementem (np. ::-webkit-scrollbar-thumb)
+                if (!element && pseudo.startsWith('::')) {
+                    return;
+                }
+
+                // Generujemy selektory z klasą emulatora
                 classSelectors.forEach(className => {
-                    selectors.push(`${element}.${className}${pseudo}`);
+                    const selector = element ? `${element}.${className}${pseudo}` : `.${className}${pseudo}`;
+
+                    if (selector.trim()) {
+                        selectors.push(selector);
+                    }
                 });
             });
 
@@ -280,7 +297,7 @@ async function analyzeMediaQueries() {
     const files = getAllFiles(renderDir);
     const output = {};
 
-    console.log(`🔍 Znaleziono ${files.length} plików HTML do analizy.`);
+    console.log(`${files.length} HTML files found for analysis.`);
 
     for (const file of files) {
         const html = fs.readFileSync(file, 'utf-8');
@@ -289,13 +306,13 @@ async function analyzeMediaQueries() {
         const relativePath = path.relative(renderDir, file);
         output[relativePath] = {};
 
-        console.log(`📄 Przetwarzanie pliku: ${relativePath}`);
-        console.log(`  🔗 Znaleziono ${cssPaths.length} plików CSS:`);
+        console.log(`File processing: ${relativePath}`);
+        console.log(`  ${cssPaths.length} CSS files found:`);
 
         for (const cssPath of cssPaths) {
-            console.log(`    • ${cssPath}`);
+            console.log(`    - ${cssPath}`);
             const entries = await parseCSSFile(cssPath);
-            console.log(`    📦 Wczytano ${entries.length} bloków media queries z ${cssPath}`);
+            console.log(`    - Loaded ${entries.length} media queries blocks from ${cssPath}`);
 
             processEntries(entries, $, output[relativePath]);
         }
@@ -310,7 +327,7 @@ async function analyzeMediaQueries() {
 
         for (const inlineCSS of inlineStyles) {
             const entries = parseCSSContent(inlineCSS);
-            console.log(`    🧩 Wczytano ${entries.length} bloków media queries z <style>`);
+            console.log(`    - Loaded ${entries.length} media queries blocks from <style>`);
             processEntries(entries, $, output[relativePath]);
         }
     }
@@ -328,13 +345,13 @@ async function analyzeMediaQueries() {
 
     const outputPath = path.join(__dirname, 'media-query-map.json');
     fs.writeFileSync(outputPath, JSON.stringify(output, null, 2), 'utf-8');
-    console.log(`✅ Zapisano analizę media queries do: ${outputPath}`);
+    console.log(`Media queries analysis saved to: ${outputPath}`);
 }
 
 function processEntries(entries, $, fileOutput) {
     for (const entry of entries) {
         const { className, selectors, declarations, media } = entry;
-        console.log(`      ▶️ Analiza klasy: ${className} (media: ${media})`);
+        console.log(`      - Class analysis: ${className} (media: ${media})`);
 
         let baseElements = selectors.map(sel => {
             const first = sel.trim().split('.emulator-')[0];
@@ -342,7 +359,7 @@ function processEntries(entries, $, fileOutput) {
         });
         baseElements = [...new Set(baseElements)];
         fileOutput[className] = baseElements.join(', ');
-        console.log(`        📝 Przypisano klasę ${className} do elementu: ${fileOutput[className]}`);
+        console.log(`        - The class ${className} has been assigned to the element: ${fileOutput[className]}`);
     }
 }
 
@@ -373,7 +390,7 @@ async function appendScriptToAllHTMLFilesInRender() {
         $('body').append(scriptTag);
         const updatedContent = $.html();
         fs.writeFileSync(filePath, updatedContent, 'utf-8');
-        console.log(`✏️ Zaktualizowano ${filePath}: dodano <script> i${hasHead ? ' <link>' : ''}`);
+        console.log(`Updated ${filePath}: added <script> added${hasHead ? ' <link>' : ''}`);
     }
 
     function walkDir(dir) {
