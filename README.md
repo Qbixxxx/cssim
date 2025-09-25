@@ -22,7 +22,7 @@ It’s a handy tool for front-end developers testing website responsiveness.
    npm install
   4. Start the application:
      ```bash
-     npm install
+     npm start
 
 ---
 
