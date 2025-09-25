@@ -36,6 +36,7 @@ Information about updates will appear here.
 - Files have been optimized. Now the project takes up 440kB less disk space!
 - Fixed bugs with selectors starting with ::. They caused QSA function errors, and the CSS file conversion itself was broken.
 - Unnecessary console.log() statements have been removed, and the remaining ones have been translated into English.
+- Iframes used to have a transparent background, so the background of the page was identical to the background of the application. Now, iframe in screen_viewport.html have a white background, so if the user has not defined a background color in CSS, the page will have a default white background.
 
 ---
 
