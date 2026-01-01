@@ -31,6 +31,12 @@ Information about updates will appear here.
 
 ---
 
+## [1.1.7] - 01.01.2026
+
+- Sometimes, complex tags were rendered incorrectly. A fix has been implemented to address this issue.
+
+---
+
 ## [1.1.6] - 24.09.2025
 
 - Files have been optimized. Now the project takes up 440kB less disk space!
