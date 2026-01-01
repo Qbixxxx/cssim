@@ -243,13 +243,13 @@ function parseCSSContent(css) {
                 }
 
                 // Rozpoznanie pseudoklasy/pseudoelementu na końcu
-                const pseudoMatch = trimmed.match(/(:{1,2}[a-zA-Z0-9-]+(?:\([^)]+\))?)$/);
+                const pseudoMatch = last.match(/(:{1,2}[a-zA-Z0-9-()]+.*)?$/);
                 let pseudo = '';
-                let element = trimmed;
+                let element = last;
 
                 if (pseudoMatch) {
-                    pseudo = pseudoMatch[0];
-                    element = trimmed.slice(0, -pseudo.length).trim();
+                    pseudo = pseudoMatch[0] || '';
+                    element = last.slice(0, -pseudo.length).trim();
                 }
 
                 // Pomijamy selektory, które są tylko pseudoelementem (np. ::-webkit-scrollbar-thumb)
